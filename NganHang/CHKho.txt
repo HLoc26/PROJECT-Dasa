@@ -1,0 +1,12 @@
+Noi dung cau hoi kho #1
+Phuong an cau hoi kho #1 a
+Phuong an cau hoi kho #1 b
+Phuong an cau hoi kho #1 c
+Phuong an cau hoi kho #1 d
+a
+Noi dung cau hoi kho #2
+Phuong an cau hoi kho #2 a
+Phuong an cau hoi kho #2 b
+Phuong an cau hoi kho #2 c
+Phuong an cau hoi kho #2 d
+c

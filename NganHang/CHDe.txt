@@ -1,0 +1,36 @@
+Noi dung cau hoi de #1
+Phuong an cau hoi de #1 a
+Phuong an cau hoi de #1 b
+Phuong an cau hoi de #1 c
+Phuong an cau hoi de #1 d
+c
+Noi dung cau hoi de #2
+Phuong an cau hoi de #2 a
+Phuong an cau hoi de #2 b
+Phuong an cau hoi de #2 c
+Phuong an cau hoi de #2 d
+a
+Noi dung cau hoi de #3
+Phuong an cau hoi de #3 a
+Phuong an cau hoi de #3 b
+Phuong an cau hoi de #3 c
+Phuong an cau hoi de #3 d
+b
+Noi dung cau hoi de #4
+Phuong an cau hoi de #4 a
+Phuong an cau hoi de #4 b
+Phuong an cau hoi de #4 c
+Phuong an cau hoi de #4 d
+d
+Noi dung cau hoi de #5
+Phuong an cau hoi de #5 a
+Phuong an cau hoi de #5 b
+Phuong an cau hoi de #5 c
+Phuong an cau hoi de #5 d
+a
+Noi dung cau hoi de #6
+Phuong an cau hoi de #6 a
+Phuong an cau hoi de #6 b
+Phuong an cau hoi de #6 c
+Phuong an cau hoi de #6 d
+c
