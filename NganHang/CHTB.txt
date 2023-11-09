@@ -1,0 +1,24 @@
+Noi dung cau hoi TB #1
+Phuong an cau hoi TB #1 a
+Phuong an cau hoi TB #1 b
+Phuong an cau hoi TB #1 c
+Phuong an cau hoi TB #1 d
+c
+Noi dung cau hoi TB #2
+Phuong an cau hoi TB #2 a
+Phuong an cau hoi TB #2 b
+Phuong an cau hoi TB #2 c
+Phuong an cau hoi TB #2 d
+d
+Noi dung cau hoi TB #3
+Phuong an cau hoi TB #3 a
+Phuong an cau hoi TB #3 b
+Phuong an cau hoi TB #3 c
+Phuong an cau hoi TB #3 d
+a
+Noi dung cau hoi TB #4
+Phuong an cau hoi TB #4 a
+Phuong an cau hoi TB #4 b
+Phuong an cau hoi TB #4 c
+Phuong an cau hoi TB #4 d
+b
