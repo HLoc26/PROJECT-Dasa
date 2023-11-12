@@ -1,5 +1,5 @@
-#pragma once
-#include <bits/stdc++.h>
+﻿#pragma once
+#include <iostream>
 using namespace std;
 
 // Câu hỏi gồm nội dung, các phương án a, b, c, d, và đáp án
@@ -10,8 +10,19 @@ struct CauHoi {
     string c = "";
     string d = "";
     string dapan;
-    CauHoi *prev;
-    CauHoi *next;
+    CauHoi* prev;
+    CauHoi* next;
+
+    CauHoi() {
+        this->noidung = "";
+        this->a = "";
+        this->b = "";
+        this->c = "";
+        this->d = "";
+        this->dapan = "";
+        this->prev = NULL;
+        this->next = NULL;
+    }
 
     CauHoi(string noidung, string a, string b, string c, string d, string dapan) {
         this->noidung = noidung;
