@@ -4,7 +4,6 @@
 #include <iostream>
 #include <string>
 
-
 using namespace std;
 
 #define MAX 100
@@ -27,9 +26,9 @@ struct DanhSach {
     }
 
     void DocFile() {
-        ifstream de("C:/DASA/PROJECT/NganHang/CHDe.txt", ios::in);
-        ifstream tb("C:/DASA/PROJECT/NganHang/CHTb.txt", ios::in);
-        ifstream kho("C:/DASA/PROJECT/NganHang/CHKho.txt", ios::in);
+        ifstream de("./NganHang/CHDe.txt", ios::in);
+        ifstream tb("./NganHang/CHTb.txt", ios::in);
+        ifstream kho("./NganHang/CHKho.txt", ios::in);
 
         if (de.fail()) {
             cerr << "ERROR Readfile: CHDe.txt\n";
