@@ -54,4 +54,5 @@ struct DLList {
         return question;
     };
 };
+
 typedef struct DLList DLList;
