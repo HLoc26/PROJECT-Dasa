@@ -7,9 +7,9 @@ using namespace std;
 
 // Danh sách liên kết đôi chứa các câu hỏi đưọc chọn
 struct DLList {
-	CauHoi* head;
-	CauHoi* tail;
-	int size;
+	CauHoi* head = NULL;
+	CauHoi* tail = NULL;
+	int size = 0;
 
 	void Push(CauHoi ch) {
 		CauHoi* temp = new CauHoi(ch.noidung, ch.a, ch.b, ch.c, ch.d, ch.dapan);
@@ -25,13 +25,21 @@ struct DLList {
 		size++;
 	}
 
-	void Pop() {
-		if (head != NULL) {
-			CauHoi* temp = head;
-			head = head->next;
-			delete temp;
-			size--;
+	void Pop(CauHoi* node) {
+		if (node->prev) {
+			node->prev->next = node->next;
 		}
+		else {
+			head = node->next;
+		}
+		if (node->next) {
+			node->next->prev = node->prev;
+		}
+		else {
+			tail = node->prev;
+		}	
+		delete node;
+		size--;
 	}
 
 	CauHoi getRandomQuestion() {
@@ -40,7 +48,9 @@ struct DLList {
 		for (int i = 0; i < index; i++) {
 			current = current->next;
 		}
-		return *current;
+		CauHoi question = *current;
+		Pop(current);
+		return question;
 	};
 };
 typedef struct DLList DLList;

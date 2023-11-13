@@ -36,7 +36,7 @@ struct CauHoi {
     }
 
     void InCauHoi() {
-        cout << noidung;
+        cout << noidung << endl;
         cout << "\t" << a << endl;
         cout << "\t" << b << endl;
         if (c != "") {
