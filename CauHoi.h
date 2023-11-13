@@ -10,7 +10,6 @@ struct CauHoi {
     string c = "";
     string d = "";
     string dapan;
-
     CauHoi *prev;
     CauHoi *next;
 
