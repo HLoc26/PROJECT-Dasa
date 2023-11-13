@@ -10,9 +10,8 @@ struct CauHoi {
     string c = "";
     string d = "";
     string dapan;
-
-    CauHoi* prev;
-    CauHoi* next;
+    CauHoi *prev;
+    CauHoi *next;
 
     CauHoi() {
         this->noidung = "";
@@ -49,4 +48,3 @@ struct CauHoi {
     }
 };
 typedef struct CauHoi CauHoi;
-
