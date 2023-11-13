@@ -3,7 +3,6 @@
 #include <cstdlib>
 #include <iostream>
 
-
 using namespace std;
 
 // Danh sách liên kết đôi chứa các câu hỏi đưọc chọn
@@ -54,4 +53,5 @@ struct DLList {
         return question;
     };
 };
+
 typedef struct DLList DLList;
