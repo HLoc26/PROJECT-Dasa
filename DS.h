@@ -1,5 +1,6 @@
 #pragma once
 #include "DLList.h"
+#include <cstdlib>
 #include <fstream>
 #include <iostream>
 #include <string>
@@ -95,6 +96,60 @@ struct DanhSach {
         for (int i = 0; i < slch_kho; i++) {
             cout << i + 1 << ". " << CauHoiKho[i].noidung << endl;
         }
+    }
+    DLList GetQuestions() {
+
+        DLList Questions;
+
+        // Tạo đề thi với câu hỏi ngẫu nhiên
+        int slDe = 0;
+        do {
+            cout << "\nNhap so luong cau hoi de muon lay ngau nhien: ";
+            cin >> slDe;
+        } while (slDe == 0 || slDe > slch_de);
+
+        int slTB = 0;
+
+        do {
+            cout << "\nNhap so luong cau hoi trung binh muon lay ngau nhien: ";
+            cin >> slTB;
+        } while (slTB == 0 || slTB > slch_tb);
+
+        int slKho = 0;
+        do {
+            cout << "\nNhap so luong cau hoi kho muon lay ngau nhien: ";
+            cin >> slKho;
+        } while (slKho == 0 || slKho > slch_kho);
+
+        int i = 0;
+        while (i < slDe) {
+            int index = rand() % slch_de;
+            bool isIn = CauHoiDe[index].in(Questions.head);
+            if (!isIn) {
+                Questions.Push(CauHoiDe[index]);
+                i += 1;
+            }
+        }
+
+        i = 0;
+        while (i < slTB) {
+            int index = rand() % slch_tb;
+            bool isIn = CauHoiTB[index].in(Questions.head);
+            if (!isIn) {
+                Questions.Push(CauHoiTB[index]);
+                i += 1;
+            }
+        }
+        i = 0;
+        while (i < slKho) {
+            int index = rand() % slch_kho;
+            bool isIn = CauHoiKho[index].in(Questions.head);
+            if (!isIn) {
+                Questions.Push(CauHoiKho[index]);
+                i += 1;
+            }
+        }
+        return Questions;
     }
 };
 typedef struct DS DS;

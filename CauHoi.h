@@ -46,5 +46,17 @@ struct CauHoi {
             cout << "\t" << d << endl;
         }
     }
+
+    // Kieem tra CauHoi co nam trong Questions hay khong
+    bool in(CauHoi *head) {
+        CauHoi *p = head;
+        while (p != NULL) {
+            if (p->noidung == this->noidung) {
+                return true;
+            }
+            p = p->next;
+        }
+        return false;
+    }
 };
 typedef struct CauHoi CauHoi;
