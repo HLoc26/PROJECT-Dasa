@@ -47,7 +47,7 @@ struct DLList {
     void PrintList() {
         CauHoi *p = head;
         while (p != NULL) {
-            p->InCauHoi();
+            p->InCauHoi(-1);
             p = p->next;
         }
     }

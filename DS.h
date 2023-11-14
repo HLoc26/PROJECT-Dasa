@@ -1,5 +1,6 @@
 #pragma once
 #include "DLList.h"
+#include <algorithm>
 #include <cstdlib>
 #include <fstream>
 #include <iostream>
@@ -26,23 +27,29 @@ struct DanhSach {
         this->slch_kho = 0;
     }
 
-    void DocFile() {
-        ifstream de("C:/DASA/PROJECT/NganHang/CHDe.txt", ios::in);
-        ifstream tb("C:/DASA/PROJECT/NganHang/CHTb.txt", ios::in);
-        ifstream kho("C:/DASA/PROJECT/NganHang/CHKho.txt", ios::in);
+    void DocFile(string monhoc) {
+        string file_de = "./NganHang/" + monhoc + "/CHDe.txt";
+        string file_tb = "./NganHang/" + monhoc + "/CHTB.txt";
+        string file_kho = "./NganHang/" + monhoc + "/CHKho.txt";
+        ifstream de(file_de, ios::in);
+        ifstream tb(file_tb, ios::in);
+        ifstream kho(file_kho, ios::in);
 
         if (de.fail()) {
-            cerr << "ERROR Readfile: CHDe.txt\n";
+            cerr << "DS.h: ERROR Readfile: CHDe.txt\n";
+            cout << file_de << endl;
             exit(0);
         }
 
         if (tb.fail()) {
-            cerr << "ERROR Readfile: CHTb.txt\n";
+            cerr << "DS.h: ERROR Readfile: CHTb.txt\n";
+            cout << file_tb << endl;
             exit(0);
         }
 
         if (kho.fail()) {
-            cerr << "ERROR Readfile: CHKho.txt\n";
+            cerr << "DS.h: ERROR Readfile: CHKho.txt\n";
+            cout << file_kho << endl;
             exit(0);
         }
 
@@ -100,7 +107,6 @@ struct DanhSach {
     DLList GetQuestions() {
 
         DLList Questions;
-
         // Tạo đề thi với câu hỏi ngẫu nhiên
         int slDe = 0;
         do {
@@ -126,7 +132,45 @@ struct DanhSach {
             int index = rand() % slch_de;
             bool isIn = CauHoiDe[index].in(Questions.head);
             if (!isIn) {
-                Questions.Push(CauHoiDe[index]);
+                CauHoi ch = CauHoiDe[index];
+                string phuongan[] = {ch.a, ch.b, ch.c, ch.d};
+
+                string DA = "";
+                if (ch.dapan == "A") {
+                    DA = ch.a;
+                }
+                else if (ch.dapan == "B") {
+                    DA = ch.b;
+                }
+                else if (ch.dapan == "C") {
+                    DA = ch.c;
+                }
+                else if (ch.dapan == "D") {
+                    DA = ch.d;
+                }
+
+                srand(time(0));
+                random_shuffle(begin(phuongan), end(phuongan)); // #include <algorithm>
+
+                ch.a = phuongan[0];
+                ch.b = phuongan[1];
+                ch.c = phuongan[2];
+                ch.d = phuongan[3];
+
+                if (DA == ch.a) {
+                    ch.dapan = "A";
+                }
+                else if (DA == ch.b) {
+                    ch.dapan = "B";
+                }
+                else if (DA == ch.c) {
+                    ch.dapan = "C";
+                }
+                else if (DA == ch.d) {
+                    ch.dapan = "D";
+                }
+
+                Questions.Push(ch);
                 i += 1;
             }
         }
