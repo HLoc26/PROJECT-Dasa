@@ -1,5 +1,6 @@
 #pragma once
 #include "CauHoi.h"
+#include "DLList.h"
 #include <cstdlib>
 #include <iostream>
 
@@ -42,16 +43,13 @@ struct DLList {
         size--;
     }
 
-    CauHoi getRandomQuestion() {
-        int index = rand() % size;
-        CauHoi *current = head;
-        for (int i = 0; i < index; i++) {
-            current = current->next;
+    void PrintList() {
+        CauHoi *p = head;
+        while (p != NULL) {
+            p->InCauHoi();
+            p = p->next;
         }
-        CauHoi question = *current;
-        Pop(current);
-        return question;
-    };
+    }
 };
 
 typedef struct DLList DLList;
