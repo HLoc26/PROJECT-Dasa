@@ -1,0 +1,60 @@
+If 3x - 7 = 14, what is the value of x?
+7
+5
+8
+9
+C
+The area of a rectangle is 36 square units, and its length is 9 units. What is the width of the rectangle?
+3 units
+4 units
+5 units
+6 units
+A
+Solve for y in the equation 2y + 5 = 11.
+3
+4
+6
+8
+B
+If a right-angled triangle has legs of lengths 5 units and 12 units, what is the length of the hypotenuse?
+13 units
+15 units
+17 units
+20 units
+A
+Simplify the expression (3(2x - 4) + 5).
+6x + 7
+6x - 7
+5x + 7
+5x - 7
+A
+The perimeter of a square is 32 units. What is the length of one side of the square?
+6 units
+7 units
+8 units
+9 units
+C
+Solve for \(x\) in the equation (2(x - 3) = 10).
+5
+6
+7
+8
+D
+If \(a + 2b = 10\) and (2a - b = 4), what is the value of (a)?
+2
+3
+4
+5
+B
+The sum of three consecutive even integers is 54. What are the integers?
+16, 18, 20
+18, 20, 22
+20, 22, 24
+22, 24, 26
+C
+If (4^x = 64), what is the value of (x)?
+2
+3
+4
+5
+B
