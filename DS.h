@@ -116,70 +116,41 @@ struct DanhSach {
     }
     DLList GetQuestions() {
 
+        cout << "\nSo luong cau hoi: \n";
+        cout << "\t\tDe:         " << slch_de << endl;
+        cout << "\t\tTrung binh: " << slch_tb << endl;
+        cout << "\t\tKho:        " << slch_kho << endl;
+
         DLList Questions;
         // Tạo đề thi với câu hỏi ngẫu nhiên
         int slDe = 0;
-        do {
-            cout << "\nNhap so luong cau hoi de muon lay ngau nhien: ";
-            cin >> slDe;
-        } while (slDe == 0 || slDe > slch_de);
-
         int slTB = 0;
-
-        do {
-            cout << "\nNhap so luong cau hoi trung binh muon lay ngau nhien: ";
-            cin >> slTB;
-        } while (slTB == 0 || slTB > slch_tb);
-
         int slKho = 0;
+
+        // Truong hop nhap 0 0 0
         do {
-            cout << "\nNhap so luong cau hoi kho muon lay ngau nhien: ";
-            cin >> slKho;
-        } while (slKho == 0 || slKho > slch_kho);
+            do {
+                cout << "\nNhap so luong cau hoi de muon lay ngau nhien: ";
+                cin >> slDe;
+            } while (slDe > slch_de);
+
+            do {
+                cout << "\nNhap so luong cau hoi trung binh muon lay ngau nhien: ";
+                cin >> slTB;
+            } while (slTB > slch_tb);
+
+            do {
+                cout << "\nNhap so luong cau hoi kho muon lay ngau nhien: ";
+                cin >> slKho;
+            } while (slKho > slch_kho);
+        } while (slDe + slTB + slKho <= 0);
 
         int i = 0;
         while (i < slDe) {
             int index = rand() % slch_de;
             bool isIn = CauHoiDe[index].in(Questions.head);
             if (!isIn) {
-                CauHoi ch = CauHoiDe[index];
-                string phuongan[] = {ch.a, ch.b, ch.c, ch.d};
-
-                string DA = "";
-                if (ch.dapan == "A") {
-                    DA = ch.a;
-                }
-                else if (ch.dapan == "B") {
-                    DA = ch.b;
-                }
-                else if (ch.dapan == "C") {
-                    DA = ch.c;
-                }
-                else if (ch.dapan == "D") {
-                    DA = ch.d;
-                }
-
-                srand(time(0));
-                random_shuffle(begin(phuongan), end(phuongan)); // #include <algorithm>
-
-                ch.a = phuongan[0];
-                ch.b = phuongan[1];
-                ch.c = phuongan[2];
-                ch.d = phuongan[3];
-
-                if (DA == ch.a) {
-                    ch.dapan = "A";
-                }
-                else if (DA == ch.b) {
-                    ch.dapan = "B";
-                }
-                else if (DA == ch.c) {
-                    ch.dapan = "C";
-                }
-                else if (DA == ch.d) {
-                    ch.dapan = "D";
-                }
-
+                CauHoi ch = RandomPhuongAn(CauHoiDe[index]);
                 Questions.Push(ch);
                 i += 1;
             }
@@ -190,7 +161,8 @@ struct DanhSach {
             int index = rand() % slch_tb;
             bool isIn = CauHoiTB[index].in(Questions.head);
             if (!isIn) {
-                Questions.Push(CauHoiTB[index]);
+                CauHoi ch = RandomPhuongAn(CauHoiTB[index]);
+                Questions.Push(ch);
                 i += 1;
             }
         }
@@ -199,11 +171,52 @@ struct DanhSach {
             int index = rand() % slch_kho;
             bool isIn = CauHoiKho[index].in(Questions.head);
             if (!isIn) {
-                Questions.Push(CauHoiKho[index]);
+                CauHoi ch = RandomPhuongAn(CauHoiKho[index]);
+                Questions.Push(ch);
                 i += 1;
             }
         }
         return Questions;
+    }
+
+    CauHoi RandomPhuongAn(CauHoi ch) {
+        string phuongan[] = {ch.a, ch.b, ch.c, ch.d};
+
+        string DA = "";
+        if (ch.dapan == "A") {
+            DA = ch.a;
+        }
+        else if (ch.dapan == "B") {
+            DA = ch.b;
+        }
+        else if (ch.dapan == "C") {
+            DA = ch.c;
+        }
+        else if (ch.dapan == "D") {
+            DA = ch.d;
+        }
+
+        srand(time(0));
+        random_shuffle(begin(phuongan), end(phuongan)); // #include <algorithm>
+
+        ch.a = phuongan[0];
+        ch.b = phuongan[1];
+        ch.c = phuongan[2];
+        ch.d = phuongan[3];
+
+        if (DA == ch.a) {
+            ch.dapan = "A";
+        }
+        else if (DA == ch.b) {
+            ch.dapan = "B";
+        }
+        else if (DA == ch.c) {
+            ch.dapan = "C";
+        }
+        else if (DA == ch.d) {
+            ch.dapan = "D";
+        }
+        return ch;
     }
 };
 typedef struct DS DS;

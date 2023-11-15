@@ -13,18 +13,5 @@
 using namespace std;
 
 int main() {
-    DanhSach DSCH;
-
-    srand(time(NULL));
-
-    DSCH.DocFile("Hoa", 1);
-    DSCH.InDSCauHoi();
-    DLList Question = DSCH.GetQuestions();
-
-    Question.PrintList();
-
-    system("pause");
-    system("cls");
-
-    StartTest(Question);
+    StartMenu();
 }
