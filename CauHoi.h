@@ -48,7 +48,7 @@ struct CauHoi {
         switch (choice % numQ) {
         case 0:
             cout << "\x1B[34m"
-                 << "\tA. " << a
+                 << "\t> A. " << a << " <"
                  << "\033[0m\n"; // Set color blue for 1 row
             cout << "\tB. " << b << endl;
             if (c != "") {
@@ -61,7 +61,7 @@ struct CauHoi {
         case 1:
             cout << "\tA. " << a << endl;
             cout << "\x1B[34m"
-                 << "\tB. " << b
+                 << "\t> B. " << b << " <"
                  << "\033[0m\n"; // Set color blue for 1 row
             if (c != "") {
                 cout << "\tC. " << c << endl;
@@ -74,7 +74,7 @@ struct CauHoi {
             cout << "\tA. " << a << endl;
             cout << "\tB. " << b << endl;
             cout << "\x1B[34m"
-                 << "\tC. " << c
+                 << "\t> C. " << c << " <"
                  << "\033[0m\n"; // Set color blue for 1 row
             if (d != "") {
                 cout << "\tD. " << d << endl;
@@ -85,7 +85,7 @@ struct CauHoi {
             cout << "\tB. " << b << endl;
             cout << "\tC. " << c << endl;
             cout << "\x1B[34m"
-                 << "\tD. " << d
+                 << "\t> D. " << d << " <"
                  << "\033[0m\n"; // Set color blue for 1 row
             break;
         default:

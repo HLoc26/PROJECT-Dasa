@@ -27,10 +27,20 @@ struct DanhSach {
         this->slch_kho = 0;
     }
 
-    void DocFile(string monhoc) {
-        string file_de = "./NganHang/" + monhoc + "/CHDe.txt";
-        string file_tb = "./NganHang/" + monhoc + "/CHTB.txt";
-        string file_kho = "./NganHang/" + monhoc + "/CHKho.txt";
+    void DocFile(string monhoc, int chap) {
+        string chapter = "";
+        if (chap == 1) {
+            chapter = "Chapter_1";
+        }
+        else if (chap == 2) {
+            chapter = "Chapter_2";
+        }
+        else if (chap == 3) {
+            chapter = "Chapter_3";
+        }
+        string file_de = "./NganHang/" + monhoc + "/" + chapter + "/CHDe.txt";
+        string file_tb = "./NganHang/" + monhoc + "/" + chapter + "/CHTB.txt";
+        string file_kho = "./NganHang/" + monhoc + "/" + chapter + "/CHKho.txt";
         ifstream de(file_de, ios::in);
         ifstream tb(file_tb, ios::in);
         ifstream kho(file_kho, ios::in);
