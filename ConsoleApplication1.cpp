@@ -17,7 +17,7 @@ int main() {
 
     srand(time(NULL));
 
-    DSCH.DocFile("Toan");
+    DSCH.DocFile("Hoa", 1);
     DSCH.InDSCauHoi();
     DLList Question = DSCH.GetQuestions();
 
