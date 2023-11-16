@@ -13,8 +13,8 @@ C
 What is the product of 6 multiplied by 9?
 45
 54
-
-
+60
+75
 B
 If a triangle has angles measuring 30 degrees, 60 degrees, and 90 degrees, what type of triangle is it?
 Equilateral
