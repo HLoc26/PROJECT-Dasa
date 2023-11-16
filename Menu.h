@@ -23,7 +23,7 @@ void StartTest(DLList Question) {
     int totalScore = 0;
     int correctAnswers = 0;  
     bool answered = false;
-
+    bool* answeredCorrectly = new bool[Question.size] { false };
 
     while (true) {
         system("cls");
@@ -59,14 +59,16 @@ void StartTest(DLList Question) {
                     break;
                 }
                 if (chHienTai->IsCorrectAnswer(answer)) {
-                    correctAnswers += 1;
+                    if (!answeredCorrectly[ans_pos]) {
+                        correctAnswers += 1;
+                        answeredCorrectly[ans_pos] = true;
+                    }
                 }
                 else {
-                    correctAnswers += 0;
+                    answeredCorrectly[ans_pos] = false;
                 }
                 ans[ans_pos] = answer;
-                answered = false;
-                
+                answered = true;
             }
         }
         else if (ex == KEY_UP) {
