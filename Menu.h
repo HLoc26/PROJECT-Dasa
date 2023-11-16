@@ -17,16 +17,46 @@
 
 using namespace std;
 
-enum Options {
+enum ERole {
+    Teacher,
+    Student
+};
+
+enum EOptions {
     Option1 = 0,
     Option2 = 1,
     Option3 = 2,
     Option4 = 3
 };
 
+enum EMenu {
+    Main,
+    Teacher,
+    Student,
+    Subject
+};
+
 /*
     - Cac ham Print... la de in cac options
     - Cac ham Menu la de chay logic chon option
+ */
+
+/*
+Menu.h
+    StartMenu
+    StudentMenu
+    TeacherMenu
+    SelectSubject
+    PrintMenu
+    SelectChapter
+    PrintSelectChapter
+Test.h
+    StartTest
+    Test
+Login.h
+    Login
+    LogInAnimate
+    CheckValidLogin
  */
 
 struct Menu {
@@ -39,29 +69,27 @@ struct Menu {
         while (true) {
             system("cls");
             cout << "===== TEST SIMULATOR =====\n";
-            PrintStartMenu(option);
+            PrintMenu(EMenu::Main, option);
             int ex = getch();
 
             if (ex == KEY_ENTER) {
                 switch (option % 4) {
+                // Studen Login
                 case Option1:
                     cout << "\nSTUDENT LOGIN\n";
-                    StudentMenu(); // Thay bằng hàm Log in
+                    Login(ERole::Student);
                     break;
+                // Student Signup
                 case Option2:
                     cout << "\nSTUDENT SIGNUP\n";
                     break;
+                // Teeacher Login
                 case Option3:
-                    LoginTeacher();
+                    Login(ERole::Teacher);
                     break;
                 case Option4:
                     system("cls");
-                    cout << "Do you want to exit? (Y/N): ";
-                    char o;
-                    cin >> o;
-                    if (tolower(o) == 'y') {
-                        exit(0);
-                    }
+                    Exit();
                     break;
                 default:
                     break;
@@ -79,19 +107,6 @@ struct Menu {
             }
         }
     }
-    // Man hinh menu luc moi vao chuong trinh
-    void PrintStartMenu(int option) {
-        cout << "OPTION: " << option % 4 << endl;
-        const char *options[] = {"Student Login", "Student Signup", "Teacher Login", "Exit"};
-        for (int i = 0; i < 4; i++) {
-            if (i == option % 4) {
-                cout << "\x1B[34m\t> " << options[i] << " <\033[0m\n";
-            }
-            else {
-                cout << "\t" << options[i] << "\n";
-            }
-        }
-    }
     // Sau khi HS da dang nhap
     void StudentMenu() {
         int option = 20000;
@@ -99,7 +114,7 @@ struct Menu {
             system("cls");
             cout << "Hello, " << username << endl;
             cout << "===============================\n";
-            PrintStudentMenu(option);
+            PrintMenu(EMenu::Student, option);
             int ex = getch();
 
             if (ex == KEY_ENTER) {
@@ -116,6 +131,8 @@ struct Menu {
                     cout << "\nChange Password\n";
                     break;
                 case Option4:
+                    username.clear();
+                    password.clear();
                     return;
                 default:
                     break;
@@ -133,20 +150,50 @@ struct Menu {
             }
         }
     }
-    // Man hinh HS
-    void PrintStudentMenu(int option) {
-        cout << "OPTION: " << option % 4 << endl;
-        const char *options[] = {"Start Test", "See Results", "Change Password", "Log Out"};
-        for (int i = 0; i < 4; i++) {
-            if (i == option % 4) {
-                cout << "\x1B[34m\t> " << options[i] << " <\033[0m\n";
+    void TeacherMenu() {
+        int option = 20000;
+        while (true) {
+            system("cls");
+            cout << "Hello, " << username << endl;
+            cout << "===============================\n";
+            PrintMenu(EMenu::Teacher, option);
+            int ex = getch();
+
+            if (ex == KEY_ENTER) {
+                switch (option % 4) {
+                case Option1:
+                    cout << "\nCheck Students' scores\n";
+                    // Hàm show score của HS
+                    break;
+                case Option2:
+                    cout << "\nAdd chapter\n";
+                    // XemDiem();
+                    break;
+                case Option3:
+                    cout << "\nChange Password\n";
+                    break;
+                case Option4:
+                    cout << "Log Out";
+                    username.clear();
+                    password.clear();
+                    return;
+                default:
+                    break;
+                }
             }
-            else {
-                cout << "\t" << options[i] << "\n";
+            else if (ex == KEY_UP) {
+                option -= 1;
+            }
+            else if (ex == KEY_DOWN) {
+                option += 1;
+            }
+            else if (ex == KEY_ESC) {
+                system("cls");
+                Exit();
             }
         }
     }
-
+    // Chọn môn học
     void SelectSubject() {
         int option = 20000;
         while (true) {
@@ -154,7 +201,7 @@ struct Menu {
             cout << "Hello, " << username << endl;
             cout << "===============================\n";
             cout << "=========SELECT SUBJECT========\n";
-            PrintSelectSubject(option);
+            PrintMenu(EMenu::Subject, option);
             int ex = getch();
 
             if (ex == KEY_ENTER) {
@@ -189,20 +236,6 @@ struct Menu {
             }
         }
     }
-
-    void PrintSelectSubject(int option) {
-        cout << "OPTION: " << option % 4 << endl;
-        const char *options[] = {"Toan", "Ly", "Hoa", "Return"};
-        for (int i = 0; i < 4; i++) {
-            if (i == option % 4) {
-                cout << "\x1B[34m\t> " << options[i] << " <\033[0m\n";
-            }
-            else {
-                cout << "\t" << options[i] << "\n";
-            }
-        }
-    }
-
     // Man hinh chon Chapter
     void SelectChapter(string monhoc) {
         int option = 20000;
@@ -211,7 +244,7 @@ struct Menu {
             cout << "Hello, " << username << endl;
             cout << "===============================\n";
             cout << "=========SELECT CHAPTER========\n";
-            PrintSelectChapter(monhoc, option);
+            PrintMenu(monhoc, option);
             int ex = getch();
 
             if (ex == KEY_ENTER) {
@@ -247,286 +280,6 @@ struct Menu {
         }
     }
 
-    void PrintSelectChapter(string monhoc, int option) {
-        cout << "OPTION: " << option % 4 << endl;
-        std::string options[4];
-        if (monhoc == "Toan") {
-            std::string temp[] = {"Chapter 1: Decimal Number",
-                                  "Chapter 2: Toan2",
-                                  "Chapter 3: Toan3",
-                                  "Return"};
-            std::copy(std::begin(temp), std::end(temp), std::begin(options));
-        }
-        else if (monhoc == "Ly") {
-            std::string temp[] = {"Chapter 1: Ly1",
-                                  "Chapter 2: Ly2",
-                                  "Chapter 3: Ly3",
-                                  "Return"};
-            std::copy(std::begin(temp), std::end(temp), std::begin(options));
-        }
-        else if (monhoc == "Hoa") {
-            std::string temp[] = {"Chapter 1: Oxygen",
-                                  "Chapter 2: Hoa2",
-                                  "Chapter 3: Hoa3",
-                                  "Return"};
-            std::copy(std::begin(temp), std::end(temp), std::begin(options));
-        }
-        for (int i = 0; i < 4; i++) {
-            if (i == option % 4) {
-                cout << "\x1B[34m\t> " << options[i] << " <\033[0m\n";
-            }
-            else {
-                cout << "\t" << options[i] << "\n";
-            }
-        }
-    }
-
-    void StartTest(string monhoc, int chapter) {
-        DanhSach DSCH;
-        srand(time(NULL));
-        DSCH.DocFile(monhoc, 1);
-        DLList Question = DSCH.GetQuestions();
-        Question.PrintList();
-        system("cls");
-        Test(Question);
-    }
-
-    // Bat dau lam bai test
-    void Test(DLList Question) {
-        CauHoi *chHienTai = Question.head;
-
-        int ans_pos = 0;
-        string *ans = new string[Question.size]{""};
-        int choices = 20000;
-        int totalScore = 0;
-        int correctAnswers = 0;
-        bool answered = false;
-        bool *answeredCorrectly = new bool[Question.size]{false};
-
-        while (true) {
-            system("cls");
-            cout << "Press ESC to submit the test.\n";
-            cout << ans_pos + 1 << ". ";
-
-            chHienTai->InCauHoi(abs(choices));
-            cout << setw(15) << left << "Prev (<-)" << setw(18) << "Choose (^ v)" << setw(10) << "Next (->)\n";
-            cout << correctAnswers << endl;
-            if (ans[ans_pos] != "") {
-                cout << "\tYour prev choice: " << ans[ans_pos] << endl;
-            }
-            cout << "\tPress Enter to choose question\n";
-            int ex = _getch();
-
-            if (ex == KEY_ENTER) {
-                if (!answered) {
-                    string answer = "";
-                    switch (choices % 4) {
-                    case 0:
-                        answer = "A";
-                        break;
-                    case 1:
-                        answer = "B";
-                        break;
-                    case 2:
-                        answer = "C";
-                        break;
-                    case 3:
-                        answer = "D";
-                        break;
-                    default:
-                        break;
-                    }
-                    if (chHienTai->IsCorrectAnswer(answer)) {
-                        if (!answeredCorrectly[ans_pos]) {
-                            correctAnswers += 1;
-                            answeredCorrectly[ans_pos] = true;
-                        }
-                    }
-                    else {
-                        if (answeredCorrectly[ans_pos]) {
-                            correctAnswers -= 1;
-                        }
-                        answeredCorrectly[ans_pos] = false;
-                    }
-                    ans[ans_pos] = answer;
-                    answered = true;
-                }
-            }
-            else if (ex == KEY_UP) {
-                choices -= 1;
-                answered = false;
-            }
-            else if (ex == KEY_DOWN) {
-                choices += 1;
-                answered = false;
-            }
-            else if (ex == KEY_LEFT) {
-                choices = 20000;
-
-                if (chHienTai->prev == NULL) {
-                    chHienTai = Question.tail;
-                    ans_pos = Question.size - 1;
-                }
-                else {
-                    chHienTai = chHienTai->prev;
-                    ans_pos -= 1;
-                }
-                if (ans[ans_pos] != "") {
-                    choices += (ans[ans_pos][0] % 4 - 1);
-                }
-            }
-            else if (ex == KEY_RIGHT) {
-                choices = 20000;
-
-                if (chHienTai->next == NULL) {
-                    chHienTai = Question.head;
-                    ans_pos = 0;
-                }
-                else {
-                    chHienTai = chHienTai->next;
-                    ans_pos += 1;
-                }
-                if (ans[ans_pos] != "") {
-                    choices += (ans[ans_pos][0] % 4 - 1);
-                }
-            }
-            else if (ex == 27) {
-                cout << "Do you want to end the test? (Y/N): ";
-                char o;
-                cin >> o;
-                if (tolower(o) == 'y') {
-                    totalScore = correctAnswers * 10;
-                    cout << "Your final score: " << totalScore << endl;
-                    exit(0);
-                }
-            }
-        }
-    }
-
-    void LoginTeacher() {
-        string passInp;
-        string userInp;
-        while (true) {
-            system("cls");
-            cout << "=========TEACHER LOGIN========\n";
-            cout << "==============================\n";
-            int ch;
-            // Bắt đầu nhập username
-            cout << "Username: ";
-            while ((ch = getch()) != KEY_ENTER) {
-                // Kiểm tra xem có nhấn ESC trong lúc nhập không
-                if (ch == KEY_ESC) {
-                    // Nếu có thì quay về main menu
-                    system("cls");
-                    cout << "Return to main menu? (Y/N): ";
-                    char o;
-                    cin >> o;
-                    if (tolower(o) == 'y') {
-                        return;
-                    }
-                    continue;
-                }
-                // Nhập sai thì phải xóa
-                if (ch == KEY_BACKSPACE) {
-                    if (userInp.length() > 0) {
-                        cout << "\b \b";
-                        userInp.pop_back();
-                        continue;
-                    }
-                    else {
-                        continue;
-                    }
-                }
-                // Thêm ký tự vừa nhập vào
-                userInp += ch;
-                // In ký tự vừa nhập ra
-                cout << userInp[userInp.length() - 1];
-            }
-            cout << endl;
-            // Bắt đầu nhập password
-            cout << "Password: ";
-            while ((ch = getch()) != KEY_ENTER) {
-                if (ch == KEY_ESC) {
-                    system("cls");
-                    cout << "Return to main menu? (Y/N): ";
-                    char o;
-                    cin >> o;
-                    if (tolower(o) == 'y') {
-                        return;
-                    }
-                    continue;
-                }
-                if (ch == KEY_BACKSPACE) {
-                    if (passInp.length() > 0) {
-                        cout << "\b \b";
-                        passInp.pop_back();
-                        continue;
-                    }
-                    else {
-                        continue;
-                    }
-                }
-                passInp += ch;
-                // In ra dấu * thay vì ký tự
-                cout << "*";
-            }
-            // Kiểm tra tài khoản mật khẩu đúng kkhông
-            if (!CheckValidLogin(userInp, passInp)) {
-                cout << "\n\x1B[31m"
-                     << "Wrong password or username!"
-                     << "\033[0m\n\n";
-                passInp = "";
-                userInp = "";
-                getch();
-            }
-            else {
-                username = userInp;
-                password = passInp;
-                LogInAnimate(); // Này làm cho màu mè
-
-                // In ra để test, sau này thêm menu teacher rồi đổi
-                // ==============================================//
-                cout << username << endl
-                     << password;
-                getch();
-                exit(0);
-                // ==============================================//
-            }
-        }
-    }
-
-    void LogInAnimate() {
-        srand(time(NULL));
-        int time = rand() % (rand() % 10 + 8) + 4;
-        for (int i = 0; i < time; i++) {
-            system("cls");
-            cout << "\x1B[32m"
-                 << "Successfully!"
-                 << "\033[0m\n";
-            cout << "Logging in" << string((i + 1) % 4, '.');
-            sleep(1);
-        }
-        system("cls");
-    }
-
-    bool CheckValidLogin(string userInp, string passInp) {
-        // Mở file với tên <username>
-        ifstream user("User/Teacher/" + userInp + ".txt", ios::in);
-        // Nếu mở thành công == có tài khoản tên username
-        if (!user.fail()) {
-            string pass_in_file;
-            getline(user, pass_in_file);
-
-            // Check pass, sai thì trả về false
-            if (pass_in_file != passInp) {
-                return false;
-            }
-            else return true;
-        }
-        // Không có tk thì trả về false
-        else return false;
-    }
-
     void Exit() {
         cout << "Do you want to exit? (Y/N): ";
         char o;
@@ -535,4 +288,15 @@ struct Menu {
             exit(0);
         }
     }
+
+    // Login.h
+    void Login(ERole role);
+    void LogInAnimate();
+    bool CheckValidLogin(string userInp, string passInp, ERole role);
+    // PrintMenu.h
+    void PrintMenu(EMenu type, int option);
+    void PrintMenu(string monhoc, int option);
+    // Test.h
+    void StartTest(string monhoc, int chapter);
+    void Test(DLList Question);
 };

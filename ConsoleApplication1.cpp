@@ -14,5 +14,4 @@ int main() {
 
     Menu menu;
     menu.StartMenu();
-
 }
