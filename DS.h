@@ -179,6 +179,7 @@ struct DanhSach {
         return Questions;
     }
 
+    // Function trả về một câu hỏi đã được xáo trộn
     CauHoi RandomPhuongAn(CauHoi ch) {
         string phuongan[] = {ch.a, ch.b, ch.c, ch.d};
 

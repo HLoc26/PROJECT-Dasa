@@ -6,12 +6,12 @@
 #include "DLList.h"
 #include "DS.h"
 #include "Menu.h"
-#include <conio.h>
-#include <iomanip>
 #include <iostream>
 
 using namespace std;
 
 int main() {
-    StartMenu();
+    Menu menu;
+
+    menu.StartMenu();
 }
