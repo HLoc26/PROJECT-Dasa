@@ -1,0 +1,30 @@
+Solve the following system of equations:2x - 3y = 5 4x + y = 7
+x = 2 , y = -1  
+x = 1 , y = 3  
+x = -1 , y = 2  
+x = 3, y = 1
+C
+If sin(x)=4/5, find cos (x):
+4/5
+3/5
+1/5 
+-3/5
+D
+If sin(x)=1, what is the value of x?
+0  
+1  
+No value
+infinity
+C
+4.Solve for x in the equation:3^x - 2^{x+1} + 5 = 0 
+x = -1
+x = 1  
+x = 2  
+x = 0
+C
+5. If a triangle has sides of lengths 3, 4, and 5, what type of triangle is it?
+Equilateral  
+Isosceles  
+Scalene  
+Right-angled
+D
