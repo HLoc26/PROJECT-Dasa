@@ -1,4 +1,4 @@
-﻿// ConsoleApplication1.cpp : This file contains the 'main' function. Program execution begins and
+// ConsoleApplication1.cpp : This file contains the 'main' function. Program execution begins and
 // ends there.
 //
 
@@ -6,25 +6,13 @@
 #include "DLList.h"
 #include "DS.h"
 #include "Menu.h"
-#include <conio.h>
-#include <iomanip>
 #include <iostream>
 
 using namespace std;
 
 int main() {
-    DanhSach DSCH;
 
-    srand(time(NULL));
+    Menu menu;
+    menu.StartMenu();
 
-    DSCH.DocFile("Toan", 1);
-    DSCH.InDSCauHoi();
-    DLList Question = DSCH.GetQuestions();
-
-    Question.PrintList();
-
-    system("pause");
-    system("cls");
-
-    StartTest(Question);
 }

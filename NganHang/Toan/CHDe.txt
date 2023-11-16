@@ -1,0 +1,60 @@
+What is the result of 5 + 7?
+10
+11
+12
+13
+C
+If a rectangle has a length of 8 units and a width of 5 units, what is its area?
+10 square units
+25 square units
+40 square units
+13 square units
+C
+What is the product of 6 multiplied by 9?
+45
+54
+
+
+B
+If a triangle has angles measuring 30 degrees, 60 degrees, and 90 degrees, what type of triangle is it?
+Equilateral
+Isosceles
+Scalene
+Right-angled
+D
+What is the value of  (2 raised to the power of 3)?
+4
+6
+8
+16
+C
+If x = 4 and y = 7, what is the value of x+y?
+9
+11
+12
+14
+B
+What is the sum of the first five prime numbers?
+15
+20
+18
+28
+C
+If a circle has a radius of 5 units, what is its diameter?
+5 units
+10 units
+15 units
+20 units
+B
+What is the result of 15 divided by 3?
+3
+5
+10
+15
+A
+If a square has a side length of 9 units, what is its perimeter?
+18 units
+27 units
+36 units
+45 units
+C

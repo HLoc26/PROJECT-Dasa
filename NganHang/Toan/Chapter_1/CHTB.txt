@@ -1,0 +1,90 @@
+What is the result of 3.6 + 2.75?
+6.35
+6.45
+5.95
+6.15
+A
+Calculate 15.4 - 7.9
+7.5
+7.9
+8.5
+8.1
+A
+What is the product of 2.5 x 4.6?
+11.0
+11.5
+10.5
+10.7
+B
+Divide 14.7 / 3
+4.9
+4.7
+5.1
+5.3
+B
+Calculate 6.25 + 9.8
+16.05
+15.45
+15.85
+16.25
+A
+Subtract 12.6 - 5.9
+6.7
+7.1
+6.5
+7.3
+C
+What is the product of 0.75 x 8?
+6.0
+6.5
+6.3
+6.8
+B
+Divide 11.2 / 2.8
+4.0
+4.2
+3.8
+4.5
+A
+Calculate 4.5 + 3.25
+7.75
+8.0
+7.25
+7.5
+A
+Subtract 9.4 - 4.6
+4.8
+5.0
+4.4
+4.2
+B
+What is the result of 2.85 x 3?
+8.55
+8.25
+8.45
+8.75
+A
+Divide 10.5 / 1.5
+7.0
+7.5
+6.5
+6.8
+B
+Calculate 7.2 + 6.9
+14.1
+14.5
+13.8
+14.3
+A
+Subtract 8.5 - 2.7
+5.6
+5.2
+5.8
+6.0
+A
+What is the product of 1.8 x 7?
+12.6
+13.2
+12.4
+12.8
+B
