@@ -112,5 +112,12 @@ struct CauHoi {
         }
         return false;
     }
+
+    bool IsCorrectAnswer(string userAnswer) {
+        if (dapan == userAnswer) {
+            return true;
+        }
+        return false;
+    }
 };
 typedef struct CauHoi CauHoi;
