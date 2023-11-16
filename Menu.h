@@ -14,6 +14,7 @@
 #define KEY_ENTER 13
 #define KEY_BACKSPACE 8
 #define KEY_ESC 27
+
 using namespace std;
 
 enum Options {
