@@ -65,6 +65,9 @@ void StartTest(DLList Question) {
                     }
                 }
                 else {
+                    if (answeredCorrectly[ans_pos]) {
+                        correctAnswers -= 1;
+                    }
                     answeredCorrectly[ans_pos] = false;
                 }
                 ans[ans_pos] = answer;
