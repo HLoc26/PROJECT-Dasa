@@ -5,7 +5,6 @@
 #include <fstream>
 #include <iomanip>
 #include <iostream>
-#include <unistd.h>
 
 #define KEY_UP 72
 #define KEY_DOWN 80
@@ -56,6 +55,8 @@ enum EMenu {
     Login
     LogInAnimate
     CheckValidLogin
+
+    Register
  */
 
 struct Menu {
@@ -80,7 +81,7 @@ struct Menu {
                     break;
                 // Student Signup
                 case Option2:
-                    cout << "\nSTUDENT SIGNUP\n";
+                    Register();
                     break;
                 // Teeacher Login
                 case Option3:
@@ -127,12 +128,18 @@ struct Menu {
                     // XemDiem();
                     break;
                 case Option3:
-                    cout << "\nChange Password\n";
+                    ChangePass(ERole::Student);
                     break;
                 case Option4:
-                    username.clear();
-                    password.clear();
-                    return;
+                    cout << "Do you want to log out? (Y/N): ";
+                    char o;
+                    cin >> o;
+                    if (tolower(o) == 'y') {
+                        username.clear();
+                        password.clear();
+                        StartMenu();
+                    }
+                    break;
                 default:
                     break;
                 }
@@ -169,7 +176,7 @@ struct Menu {
                     // XemDiem();
                     break;
                 case Option3:
-                    cout << "\nChange Password\n";
+                    ChangePass(ERole::Teacher);
                     break;
                 case Option4:
                     cout << "Log Out";
@@ -236,7 +243,6 @@ struct Menu {
         }
     }
     void PrintMenu(EMenu type, int option) {
-        cout << "OPTION: " << option % 4 << endl;
         string options[4];
         if (type == EMenu::MainM) {
             string temp[] = {"Student Login",
@@ -319,26 +325,25 @@ struct Menu {
         }
     }
     void PrintMenu(string monhoc, int option) {
-        cout << "OPTION: " << option % 4 << endl;
         string options[4];
-        if (monhoc == "Toan") {
+        if (monhoc == "Math") {
             string temp[] = {"Chapter 1: Decimal Number",
                              "Chapter 2: Toan2",
                              "Chapter 3: Toan3",
                              "Return"};
             copy(begin(temp), end(temp), begin(options));
         }
-        else if (monhoc == "Ly") {
-            string temp[] = {"Chapter 1: Ly1",
-                             "Chapter 2: Ly2",
-                             "Chapter 3: Ly3",
+        else if (monhoc == "English") {
+            string temp[] = {"Chapter 1: E1",
+                             "Chapter 2: E2",
+                             "Chapter 3: E3",
                              "Return"};
             copy(begin(temp), end(temp), begin(options));
         }
-        else if (monhoc == "Hoa") {
+        else if (monhoc == "Chemistry") {
             string temp[] = {"Chapter 1: Oxygen",
-                             "Chapter 2: Hoa2",
-                             "Chapter 3: Hoa3",
+                             "Chapter 2: Bases",
+                             "Chapter 3: Acids",
                              "Return"};
             copy(begin(temp), end(temp), begin(options));
         }
@@ -447,16 +452,21 @@ struct Menu {
             else {
                 username = userInp;
                 password = passInp;
-                LogInAnimate(); // Này làm cho màu mè
+                cout << "\x1B[32m"
+                     << "Succeed!"
+                     << "\033[0m\n";
+                cout << "Logging in";
+                system("cls");
 
                 // In ra để test, sau này thêm menu teacher rồi đổi
                 // ==============================================//
-                cout << username << endl
-                     << password;
-                getch();
+                // cout << username << endl
+                //      << password;
+                // getch();
                 // exit(0);
                 // ==============================================//
                 if (role == ERole::Teacher) {
+                    TeacherMenu();
                 }
                 else {
                     StudentMenu();
@@ -471,10 +481,9 @@ struct Menu {
         for (int i = 0; i < time; i++) {
             system("cls");
             cout << "\x1B[32m"
-                 << "Successfully!"
+                 << "Succeed!"
                  << "\033[0m\n";
             cout << "Logging in" << string((i + 1) % 4, '.');
-            sleep(1);
         }
         system("cls");
     }
@@ -496,12 +505,19 @@ struct Menu {
 
             // Check pass, sai thì trả về false
             if (filePass != passInp) {
+                user.close();
                 return false;
             }
-            else return true;
+            else {
+                user.close();
+                return true;
+            }
         }
         // Không có tk thì trả về false
-        else return false;
+        else {
+            user.close();
+            return false;
+        }
     }
     void StartTest(string monhoc, int chapter) {
         DanhSach DSCH;
@@ -622,5 +638,385 @@ struct Menu {
                 }
             }
         }
+    }
+
+    void Register() {
+        string userInp;
+        string passInp;
+        string passInp2;
+
+        // Bắt đầu nhập username
+        bool isValidUser = true;
+        do {
+            userInp.clear();
+            system("cls");
+            cout << "====== STUDENT REGISTER ======\n";
+            cout << "==============================\n";
+            int ch;
+            if (!isValidUser) {
+                cout << "\x1B[31m"
+                     << "Username is used!"
+                     << "\033[0m\n";
+            }
+            cout << "Username: ";
+            while ((ch = getch()) != KEY_ENTER) {
+                // Kiểm tra xem có nhấn ESC trong lúc nhập không
+                if (ch == KEY_ESC) {
+                    // Nếu có thì quay về main menu
+                    system("cls");
+                    cout << "Return to main menu? (Y/N): ";
+                    char o;
+                    cin >> o;
+                    if (tolower(o) == 'y') {
+                        return;
+                    }
+                    continue;
+                }
+                // Nhập sai thì phải xóa
+                if (ch == KEY_BACKSPACE) {
+                    if (userInp.length() > 0) {
+                        cout << "\b \b";
+                        userInp.pop_back();
+                        continue;
+                    }
+                    else {
+                        continue;
+                    }
+                }
+                // Thêm ký tự vừa nhập vào
+                userInp += ch;
+                // In ký tự vừa nhập ra
+                cout << userInp[userInp.length() - 1];
+            }
+            isValidUser = CheckValidUsername(userInp);
+        } while (!isValidUser);
+
+        // Password
+        bool isValidPass = true;
+        do {
+            passInp.clear();
+            system("cls");
+            cout << "====== STUDENT REGISTER ======\n";
+            cout << "==============================\n";
+            int ch;
+            cout << "Username: " << userInp << endl;
+            // Bắt đầu nhập password
+            if (!isValidPass) {
+                cout << "\x1B[31m"
+                     << "Password must contain:"
+                     << "\033[0m\n";
+                cout << "\x1B[31m"
+                     << "               - More than 8 character"
+                     << "\033[0m\n";
+                cout << "\x1B[31m"
+                     << "               - Contains at least 1 digit"
+                     << "\033[0m\n";
+                cout << "\x1B[31m"
+                     << "               - Contains at least 1 alphabetic character"
+                     << "\033[0m\n";
+            }
+            else {
+                cout << "Password must contain: \n";
+                cout << "               - More than 8 character\n";
+                cout << "               - Contains at least 1 digit\n";
+                cout << "               - Contains at least 1 alphabetic character\n";
+            }
+            cout << "Password: ";
+            while ((ch = getch()) != KEY_ENTER) {
+                if (ch == KEY_ESC) {
+                    system("cls");
+                    cout << "Return to main menu? (Y/N): ";
+                    char o;
+                    cin >> o;
+                    if (tolower(o) == 'y') {
+                        return;
+                    }
+                    continue;
+                }
+                if (ch == KEY_BACKSPACE) {
+                    if (passInp.length() > 0) {
+                        cout << "\b \b";
+                        passInp.pop_back();
+                        continue;
+                    }
+                    else {
+                        continue;
+                    }
+                }
+                passInp += ch;
+                // In ra dấu * thay vì ký tự
+                cout << "*";
+            }
+            isValidPass = CheckValidPass(passInp);
+        } while (!isValidPass);
+
+        // Nhập lại pass
+        bool isValidPass2 = true;
+        do {
+
+            passInp2.clear();
+            system("cls");
+
+            cout << "====== STUDENT REGISTER ======\n";
+            cout << "==============================\n";
+            int ch;
+            cout << "Username: " << userInp << endl;
+            // Bắt đầu nhập password
+            cout << "Password must contain: \n";
+            cout << "               - More than 8 character\n";
+            cout << "               - Contains at least 1 digit\n";
+            cout << "               - Contains at least 1 alphabetic character\n";
+            cout << "Password: " << string(passInp.length(), '*') << endl;
+            if (!isValidPass2) {
+                cout << "\x1B[31m"
+                     << "Password doesn't match!"
+                     << "\033[0m\n";
+            }
+
+            cout << "Retype password: ";
+            while ((ch = getch()) != KEY_ENTER) {
+                if (ch == KEY_ESC) {
+                    system("cls");
+                    cout << "Return to main menu? (Y/N): ";
+                    char o;
+                    cin >> o;
+                    if (tolower(o) == 'y') {
+                        return;
+                    }
+                    continue;
+                }
+                if (ch == KEY_BACKSPACE) {
+                    if (passInp2.length() > 0) {
+                        cout << "\b \b";
+                        passInp2.pop_back();
+                        continue;
+                    }
+                    else {
+                        continue;
+                    }
+                }
+                passInp2 += ch;
+                // In ra dấu * thay vì ký tự
+                cout << "*";
+            }
+            isValidPass2 = (passInp2 == passInp);
+        } while (!isValidPass2);
+
+        /*
+        cout << userInp << endl
+             << passInp << endl;
+        getch();
+        */
+
+        ofstream user("User/Student/" + userInp + ".txt", ios::in);
+        user << passInp;
+        user.close();
+        cout << "\x1B[32m\n"
+             << "Successfully registered!"
+             << "\033[0m\n";
+        cout << "Press any button to return\n";
+        getch();
+        return;
+    }
+
+    // Trả về true nếu tên user không tồn tại = mở file fail
+    bool CheckValidUsername(string userInp) {
+        ifstream inp("User/Student/" + userInp + ".txt", ios::in);
+        if (inp.fail()) {
+            inp.close();
+            return true;
+        }
+        // false = mở file thành công, có user có tên đó
+        inp.close();
+        return false;
+    }
+    // Trả về true nếu password dài hơn 8 ký tự, có chứa cả chữ và số
+    bool CheckValidPass(string passInp) {
+        if (passInp.length() < 8) {
+            return false;
+        }
+        bool haveDigit = false, haveAlpha = false;
+
+        for (int i = 0; i < passInp.length(); i++) {
+            if (isdigit(passInp[i])) {
+                haveDigit = true;
+            }
+            if (isalpha(passInp[i])) {
+                haveAlpha = true;
+            }
+        }
+        return (haveDigit && haveAlpha);
+    }
+
+    void ChangePass(ERole role) {
+        string oldPass;
+        string newPass;
+        string newPass2;
+
+        bool isValidOld = true;
+        do {
+
+            oldPass.clear();
+            system("cls");
+
+            cout << "====== CHANGE PASSWORD  ======\n";
+            cout << "==============================\n";
+            int ch;
+            cout << "Username: " << username << endl;
+            if (!isValidOld) {
+                cout << "\x1B[31m"
+                     << "Password doesn't match!"
+                     << "\033[0m\n";
+            };
+            cout << "Old password: ";
+            while ((ch = getch()) != KEY_ENTER) {
+                if (ch == KEY_ESC) {
+                    system("cls");
+                    cout << "Return to main menu? (Y/N): ";
+                    char o;
+                    cin >> o;
+                    if (tolower(o) == 'y') {
+                        return;
+                    }
+                    continue;
+                }
+                if (ch == KEY_BACKSPACE) {
+                    if (oldPass.length() > 0) {
+                        cout << "\b \b";
+                        oldPass.pop_back();
+                        continue;
+                    }
+                    else {
+                        continue;
+                    }
+                }
+                oldPass += ch;
+                // In ra dấu * thay vì ký tự
+                cout << "*";
+            }
+            isValidOld = (oldPass == password);
+        } while (!isValidOld);
+
+        // New password
+        bool isValidPass = true;
+        do {
+            newPass.clear();
+            system("cls");
+            cout << "====== CHANGE PASSWORD  ======\n";
+            cout << "==============================\n";
+            int ch;
+            cout << "Username: " << username << endl;
+            cout << "Old password: " << string(oldPass.length(), '*') << endl;
+
+            // Bắt đầu nhập password
+            if (!isValidPass) {
+                cout << "\x1B[31m"
+                     << "Password must contain:"
+                     << "\033[0m\n";
+                cout << "\x1B[31m"
+                     << "               - More than 8 character"
+                     << "\033[0m\n";
+                cout << "\x1B[31m"
+                     << "               - Contains at least 1 digit"
+                     << "\033[0m\n";
+                cout << "\x1B[31m"
+                     << "               - Contains at least 1 alphabetic charater"
+                     << "\033[0m\n";
+            }
+            else {
+                cout << "Password must contain: \n";
+                cout << "               - More than 8 character\n";
+                cout << "               - Contains at least 1 digit\n";
+                cout << "               - Contains at least 1 alphabetic charater\n";
+            }
+            cout << "New password: ";
+            while ((ch = getch()) != KEY_ENTER) {
+                if (ch == KEY_ESC) {
+                    system("cls");
+                    cout << "Return to main menu? (Y/N): ";
+                    char o;
+                    cin >> o;
+                    if (tolower(o) == 'y') {
+                        return;
+                    }
+                    continue;
+                }
+                if (ch == KEY_BACKSPACE) {
+                    if (newPass.length() > 0) {
+                        cout << "\b \b";
+                        newPass.pop_back();
+                        continue;
+                    }
+                    else {
+                        continue;
+                    }
+                }
+                newPass += ch;
+                // In ra dấu * thay vì ký tự
+                cout << "*";
+            }
+            isValidPass = CheckValidPass(newPass);
+        } while (!isValidPass);
+
+        bool isValidPass2 = true;
+        do {
+            newPass2.clear();
+            system("cls");
+
+            cout << "====== CHANGE PASSWORD  ======\n";
+            cout << "==============================\n";
+            int ch;
+            cout << "Username: " << username << endl;
+            // Bắt đầu nhập password
+            cout << "Old password: " << string(oldPass.length(), '*') << endl;
+            cout << "New password: " << string(newPass.length(), '*') << endl;
+
+            if (!isValidPass2) {
+                cout << "\x1B[31m"
+                     << "Password doesn't match!"
+                     << "\033[0m\n";
+            }
+
+            cout << "Retype password: ";
+            while ((ch = getch()) != KEY_ENTER) {
+                if (ch == KEY_ESC) {
+                    system("cls");
+                    cout << "Return to main menu? (Y/N): ";
+                    char o;
+                    cin >> o;
+                    if (tolower(o) == 'y') {
+                        return;
+                    }
+                    continue;
+                }
+                if (ch == KEY_BACKSPACE) {
+                    if (newPass2.length() > 0) {
+                        cout << "\b \b";
+                        newPass2.pop_back();
+                        continue;
+                    }
+                    else {
+                        continue;
+                    }
+                }
+                newPass2 += ch;
+                // In ra dấu * thay vì ký tự
+                cout << "*";
+            }
+            isValidPass2 = (newPass2 == newPass);
+        } while (!isValidPass2);
+
+        password = newPass2;
+        string path;
+        if (role == ERole::Student) {
+            path = "User/Student/" + username + "txt";
+        }
+        else {
+            path = "User/Teacher/" + username + "txt";
+        }
+        ofstream user(path, ios::in);
+        user.clear();
+        user << password;
+        user.close();
     }
 };
