@@ -14,6 +14,7 @@
 #define KEY_ENTER 13
 #define KEY_BACKSPACE 8
 #define KEY_ESC 27
+
 using namespace std;
 
 enum Options {
@@ -297,46 +298,67 @@ struct Menu {
         int ans_pos = 0;
         string *ans = new string[Question.size]{""};
         int choices = 20000;
+        int totalScore = 0;
+        int correctAnswers = 0;
+        bool answered = false;
+        bool *answeredCorrectly = new bool[Question.size]{false};
 
         while (true) {
             system("cls");
-            cout << "Press ESC to exit\n";
+            cout << "Press ESC to submit the test.\n";
             cout << ans_pos + 1 << ". ";
 
             chHienTai->InCauHoi(abs(choices));
             cout << setw(15) << left << "Prev (<-)" << setw(18) << "Choose (^ v)" << setw(10) << "Next (->)\n";
-
+            cout << correctAnswers << endl;
             if (ans[ans_pos] != "") {
                 cout << "\tYour prev choice: " << ans[ans_pos] << endl;
             }
             cout << "\tPress Enter to choose question\n";
-            int ex = getch();
+            int ex = _getch();
 
             if (ex == KEY_ENTER) {
-                string answer = "";
-                switch (choices % 4) {
-                case Option1:
-                    answer = "A";
-                    break;
-                case Option2:
-                    answer = "B";
-                    break;
-                case Option3:
-                    answer = "C";
-                    break;
-                case Option4:
-                    answer = "D";
-                    break;
-                default:
-                    break;
+                if (!answered) {
+                    string answer = "";
+                    switch (choices % 4) {
+                    case 0:
+                        answer = "A";
+                        break;
+                    case 1:
+                        answer = "B";
+                        break;
+                    case 2:
+                        answer = "C";
+                        break;
+                    case 3:
+                        answer = "D";
+                        break;
+                    default:
+                        break;
+                    }
+                    if (chHienTai->IsCorrectAnswer(answer)) {
+                        if (!answeredCorrectly[ans_pos]) {
+                            correctAnswers += 1;
+                            answeredCorrectly[ans_pos] = true;
+                        }
+                    }
+                    else {
+                        if (answeredCorrectly[ans_pos]) {
+                            correctAnswers -= 1;
+                        }
+                        answeredCorrectly[ans_pos] = false;
+                    }
+                    ans[ans_pos] = answer;
+                    answered = true;
                 }
-                ans[ans_pos] = answer;
             }
             else if (ex == KEY_UP) {
                 choices -= 1;
+                answered = false;
             }
             else if (ex == KEY_DOWN) {
                 choices += 1;
+                answered = false;
             }
             else if (ex == KEY_LEFT) {
                 choices = 20000;
@@ -368,8 +390,15 @@ struct Menu {
                     choices += (ans[ans_pos][0] % 4 - 1);
                 }
             }
-            else if (ex == KEY_ESC) {
-                Exit();
+            else if (ex == 27) {
+                cout << "Do you want to end the test? (Y/N): ";
+                char o;
+                cin >> o;
+                if (tolower(o) == 'y') {
+                    totalScore = correctAnswers * 10;
+                    cout << "Your final score: " << totalScore << endl;
+                    exit(0);
+                }
             }
         }
     }

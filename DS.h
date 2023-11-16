@@ -38,9 +38,10 @@ struct DanhSach {
         else if (chap == 3) {
             chapter = "Chapter_3";
         }
-        string file_de = "./NganHang/" + monhoc + "/" + chapter + "/CHDe.txt";
-        string file_tb = "./NganHang/" + monhoc + "/" + chapter + "/CHTB.txt";
-        string file_kho = "./NganHang/" + monhoc + "/" + chapter + "/CHKho.txt";
+
+        string file_de = "C:/DASA/TEST PROJECT/ConsoleApplication1/NganHang/" + monhoc + "/" + chapter + "/CHDe.txt";
+        string file_tb = "C:/DASA/TEST PROJECT/ConsoleApplication1/NganHang/" + monhoc + "/" + chapter + "/CHTB.txt";
+        string file_kho = "C:/DASA/TEST PROJECT/ConsoleApplication1/NganHang/" + monhoc + "/" + chapter + "/CHKho.txt";
         ifstream de(file_de, ios::in);
         ifstream tb(file_tb, ios::in);
         ifstream kho(file_kho, ios::in);
@@ -121,6 +122,7 @@ struct DanhSach {
         cout << "\t\tTrung binh: " << slch_tb << endl;
         cout << "\t\tKho:        " << slch_kho << endl;
 
+
         DLList Questions;
         // Tạo đề thi với câu hỏi ngẫu nhiên
         int slDe = 0;
@@ -150,6 +152,7 @@ struct DanhSach {
             int index = rand() % slch_de;
             bool isIn = CauHoiDe[index].in(Questions.head);
             if (!isIn) {
+
                 CauHoi ch = RandomPhuongAn(CauHoiDe[index]);
                 Questions.Push(ch);
                 i += 1;
