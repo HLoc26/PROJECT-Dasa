@@ -4,24 +4,24 @@ What is the result of 5 + 7?
 12
 13
 C
-If a rectangle has a length of 8 units and a width of 5 units, what is its area?
-10 square units
-25 square units
-40 square units
-13 square units
-C
+What is the sum of the first 20 positive integers?
+190
+200
+210
+220
+B
 What is the product of 6 multiplied by 9?
 45
 54
 60
 75
 B
-If a triangle has angles measuring 30 degrees, 60 degrees, and 90 degrees, what type of triangle is it?
-Equilateral
-Isosceles
-Scalene
-Right-angled
-D
+What is the square root of 144?
+10
+12
+14
+16
+B
 What is the value of  (2 raised to the power of 3)?
 4
 6
@@ -40,21 +40,21 @@ What is the sum of the first five prime numbers?
 18
 28
 C
-If a circle has a radius of 5 units, what is its diameter?
-5 units
-10 units
-15 units
-20 units
-B
+If a car travels at a speed of 60 miles per hour, how far will it travel in 3 hours?
+120 miles
+150 miles
+180 miles
+210 miles
+C
 What is the result of 15 divided by 3?
 3
 5
 10
 15
 A
-If a square has a side length of 9 units, what is its perimeter?
-18 units
-27 units
-36 units
-45 units
-C
+What is the product of −4 and 9?
+A) -36
+B) -27
+C) 36
+D) 27
+A
