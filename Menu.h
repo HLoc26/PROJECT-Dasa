@@ -5,6 +5,7 @@
 #include <fstream>
 #include <iomanip>
 #include <iostream>
+#include <thread>
 
 #define KEY_UP 72
 #define KEY_DOWN 80
@@ -13,6 +14,11 @@
 #define KEY_ENTER 13
 #define KEY_BACKSPACE 8
 #define KEY_ESC 27
+
+#define COLOR_RED "\x1B[31m"
+#define COLOR_BLUE "\x1B[36m"
+#define COLOR_GREEN "\x1B[32m"
+#define COLOR_END "\033[0m"
 
 using namespace std;
 
@@ -33,6 +39,12 @@ enum EMenu {
     TeacherM,
     StudentM,
     SubjectM
+};
+
+enum ESubject {
+    Math,
+    Chemistry,
+    English
 };
 
 /*
@@ -70,7 +82,7 @@ struct Menu {
             system("cls");
             cout << "===== TEST SIMULATOR =====\n";
             PrintMenu(EMenu::MainM, option);
-            int ex = getch();
+            int ex = _getch();
 
             if (ex == KEY_ENTER) {
                 switch (option % 4) {
@@ -115,7 +127,7 @@ struct Menu {
             cout << "Hello, " << username << endl;
             cout << "===============================\n";
             PrintMenu(EMenu::StudentM, option);
-            int ex = getch();
+            int ex = _getch();
 
             if (ex == KEY_ENTER) {
                 switch (option % 4) {
@@ -163,7 +175,7 @@ struct Menu {
             cout << "Hello, " << username << endl;
             cout << "===============================\n";
             PrintMenu(EMenu::TeacherM, option);
-            int ex = getch();
+            int ex = _getch();
 
             if (ex == KEY_ENTER) {
                 switch (option % 4) {
@@ -208,21 +220,18 @@ struct Menu {
             cout << "===============================\n";
             cout << "=========SELECT SUBJECT========\n";
             PrintMenu(EMenu::SubjectM, option);
-            int ex = getch();
+            int ex = _getch();
 
             if (ex == KEY_ENTER) {
                 switch (option % 4) {
                 case Option1:
-                    cout << "\nToan\n";
-                    SelectChapter("Toan");
+                    SelectChapter(ESubject::Math);
                     break;
                 case Option2:
-                    cout << "\nLy\n";
-                    SelectChapter("Ly");
+                    SelectChapter(ESubject::English);
                     break;
                 case Option3:
-                    cout << "\nHoa\n";
-                    SelectChapter("Hoa");
+                    SelectChapter(ESubject::Chemistry);
                     break;
                 case Option4:
                     return;
@@ -244,6 +253,7 @@ struct Menu {
     }
     void PrintMenu(EMenu type, int option) {
         string options[4];
+        int size;
         if (type == EMenu::MainM) {
             string temp[] = {"Student Login",
                              "Student Register",
@@ -255,26 +265,26 @@ struct Menu {
             string temp[] = {"See Students' Scores",
                              "Add Questions",
                              "Change Password",
-                             "Return"};
+                             "Log out"};
             copy(begin(temp), end(temp), begin(options));
         }
         else if (type == EMenu::StudentM) {
-            string temp[] = {"Start Test",
+            string temp[] = {"Practice Test",
                              "See Scores",
                              "Change Password",
-                             "Return"};
+                             "Log out"};
             copy(begin(temp), end(temp), begin(options));
         }
         else if (type == EMenu::SubjectM) {
-            string temp[] = {"Toan",
-                             "Ly",
-                             "Hoa",
+            string temp[] = {"Math",
+                             "English",
+                             "Chemistry",
                              "Return"};
             copy(begin(temp), end(temp), begin(options));
         }
         for (int i = 0; i < 4; i++) {
             if (i == option % 4) {
-                cout << "\x1B[34m\t> " << options[i] << " <\033[0m\n";
+                cout << COLOR_BLUE << "\t> " << options[i] << " <\033[0m\n";
             }
             else {
                 cout << "\t" << options[i] << "\n";
@@ -282,7 +292,7 @@ struct Menu {
         }
     }
     // Man hinh chon Chapter
-    void SelectChapter(string monhoc) {
+    void SelectChapter(ESubject monhoc) {
         int option = 20000;
         while (true) {
             system("cls");
@@ -290,7 +300,7 @@ struct Menu {
             cout << "===============================\n";
             cout << "=========SELECT CHAPTER========\n";
             PrintMenu(monhoc, option);
-            int ex = getch();
+            int ex = _getch();
 
             if (ex == KEY_ENTER) {
                 switch (option % 4) {
@@ -324,23 +334,40 @@ struct Menu {
             }
         }
     }
-    void PrintMenu(string monhoc, int option) {
+    void PrintMenu(ESubject monhoc, int option) {
+        string mon;
+        switch (monhoc) {
+        case ESubject::Math:
+            mon = "Math";
+            break;
+        case ESubject::English:
+            mon = "English";
+            break;
+        case ESubject::Chemistry:
+            mon = "Chemistry";
+            break;
+
+        default:
+            break;
+        }
+        cout << endl
+             << mon << endl;
         string options[4];
-        if (monhoc == "Math") {
+        if (monhoc == ESubject::Math) {
             string temp[] = {"Chapter 1: Decimal Number",
-                             "Chapter 2: Toan2",
-                             "Chapter 3: Toan3",
+                             "Chapter 2: Math2",
+                             "Chapter 3: Math3",
                              "Return"};
             copy(begin(temp), end(temp), begin(options));
         }
-        else if (monhoc == "English") {
+        else if (monhoc == ESubject::English) {
             string temp[] = {"Chapter 1: E1",
                              "Chapter 2: E2",
                              "Chapter 3: E3",
                              "Return"};
             copy(begin(temp), end(temp), begin(options));
         }
-        else if (monhoc == "Chemistry") {
+        else if (monhoc == ESubject::Chemistry) {
             string temp[] = {"Chapter 1: Oxygen",
                              "Chapter 2: Bases",
                              "Chapter 3: Acids",
@@ -349,7 +376,7 @@ struct Menu {
         }
         for (int i = 0; i < 4; i++) {
             if (i == option % 4) {
-                cout << "\x1B[34m\t> " << options[i] << " <\033[0m\n";
+                cout << COLOR_BLUE << "\t> " << options[i] << " <\033[0m\n";
             }
             else {
                 cout << "\t" << options[i] << "\n";
@@ -383,7 +410,7 @@ struct Menu {
             int ch;
             // Bắt đầu nhập username
             cout << "Username: ";
-            while ((ch = getch()) != KEY_ENTER) {
+            while ((ch = _getch()) != KEY_ENTER) {
                 // Kiểm tra xem có nhấn ESC trong lúc nhập không
                 if (ch == KEY_ESC) {
                     // Nếu có thì quay về main menu
@@ -415,7 +442,7 @@ struct Menu {
             cout << endl;
             // Bắt đầu nhập password
             cout << "Password: ";
-            while ((ch = getch()) != KEY_ENTER) {
+            while ((ch = _getch()) != KEY_ENTER) {
                 if (ch == KEY_ESC) {
                     system("cls");
                     cout << "Return to main menu? (Y/N): ";
@@ -442,27 +469,30 @@ struct Menu {
             }
             // Kiểm tra tài khoản mật khẩu đúng kkhông
             if (!CheckValidLogin(userInp, passInp, role)) {
-                cout << "\n\x1B[31m"
+                cout << "\n"
+                     << COLOR_RED
                      << "Wrong password or username!"
-                     << "\033[0m\n\n";
+                     << COLOR_END << "\n\n";
                 passInp = "";
                 userInp = "";
-                getch();
+                _getch();
             }
             else {
                 username = userInp;
                 password = passInp;
-                cout << "\x1B[32m"
+                cout << endl
+                     << COLOR_GREEN
                      << "Succeed!"
-                     << "\033[0m\n";
-                cout << "Logging in";
+                     << COLOR_END << "\n";
+                cout << "Press any button to continue!\n";
+                _getch();
                 system("cls");
 
                 // In ra để test, sau này thêm menu teacher rồi đổi
                 // ==============================================//
                 // cout << username << endl
                 //      << password;
-                // getch();
+                // _getch();
                 // exit(0);
                 // ==============================================//
                 if (role == ERole::Teacher) {
@@ -480,10 +510,11 @@ struct Menu {
         int time = rand() % (rand() % 10 + 8) + 4;
         for (int i = 0; i < time; i++) {
             system("cls");
-            cout << "\x1B[32m"
+            cout << COLOR_GREEN
                  << "Succeed!"
-                 << "\033[0m\n";
+                 << COLOR_END << "\n";
             cout << "Logging in" << string((i + 1) % 4, '.');
+            this_thread::sleep_for(chrono::seconds(1));
         }
         system("cls");
     }
@@ -519,10 +550,26 @@ struct Menu {
             return false;
         }
     }
-    void StartTest(string monhoc, int chapter) {
+    void StartTest(ESubject monhoc, int chapter) {
+        string mon;
+        switch (monhoc) {
+        case ESubject::Math:
+            mon = "Toan";
+            break;
+        case ESubject::English:
+            mon = "TiengAnh";
+            break;
+        case ESubject::Chemistry:
+            mon = "Hoa";
+            break;
+
+        default:
+            break;
+        }
+
         DanhSach DSCH;
         srand(time(NULL));
-        DSCH.DocFile(monhoc, 1);
+        DSCH.DocFile(mon, 1);
         DLList Question = DSCH.GetQuestions();
         Question.PrintList();
         system("cls");
@@ -659,7 +706,7 @@ struct Menu {
                      << "\033[0m\n";
             }
             cout << "Username: ";
-            while ((ch = getch()) != KEY_ENTER) {
+            while ((ch = _getch()) != KEY_ENTER) {
                 // Kiểm tra xem có nhấn ESC trong lúc nhập không
                 if (ch == KEY_ESC) {
                     // Nếu có thì quay về main menu
@@ -722,7 +769,7 @@ struct Menu {
                 cout << "               - Contains at least 1 alphabetic character\n";
             }
             cout << "Password: ";
-            while ((ch = getch()) != KEY_ENTER) {
+            while ((ch = _getch()) != KEY_ENTER) {
                 if (ch == KEY_ESC) {
                     system("cls");
                     cout << "Return to main menu? (Y/N): ";
@@ -768,13 +815,13 @@ struct Menu {
             cout << "               - Contains at least 1 alphabetic character\n";
             cout << "Password: " << string(passInp.length(), '*') << endl;
             if (!isValidPass2) {
-                cout << "\x1B[31m"
+                cout << COLOR_RED
                      << "Password doesn't match!"
-                     << "\033[0m\n";
+                     << COLOR_END << "\n";
             }
 
             cout << "Retype password: ";
-            while ((ch = getch()) != KEY_ENTER) {
+            while ((ch = _getch()) != KEY_ENTER) {
                 if (ch == KEY_ESC) {
                     system("cls");
                     cout << "Return to main menu? (Y/N): ";
@@ -805,17 +852,19 @@ struct Menu {
         /*
         cout << userInp << endl
              << passInp << endl;
-        getch();
+        _getch();
         */
 
-        ofstream user("User/Student/" + userInp + ".txt", ios::in);
+        ofstream user("User/Student/" + userInp + ".txt", ios::out);
         user << passInp;
-        user.close();
         cout << "\x1B[32m\n"
              << "Successfully registered!"
              << "\033[0m\n";
         cout << "Press any button to return\n";
-        getch();
+        user.close();
+
+        _getch();
+
         return;
     }
 
@@ -864,12 +913,12 @@ struct Menu {
             int ch;
             cout << "Username: " << username << endl;
             if (!isValidOld) {
-                cout << "\x1B[31m"
+                cout << COLOR_RED
                      << "Password doesn't match!"
-                     << "\033[0m\n";
+                     << COLOR_END << "\n";
             };
             cout << "Old password: ";
-            while ((ch = getch()) != KEY_ENTER) {
+            while ((ch = _getch()) != KEY_ENTER) {
                 if (ch == KEY_ESC) {
                     system("cls");
                     cout << "Return to main menu? (Y/N): ";
@@ -930,7 +979,7 @@ struct Menu {
                 cout << "               - Contains at least 1 alphabetic charater\n";
             }
             cout << "New password: ";
-            while ((ch = getch()) != KEY_ENTER) {
+            while ((ch = _getch()) != KEY_ENTER) {
                 if (ch == KEY_ESC) {
                     system("cls");
                     cout << "Return to main menu? (Y/N): ";
@@ -972,13 +1021,13 @@ struct Menu {
             cout << "New password: " << string(newPass.length(), '*') << endl;
 
             if (!isValidPass2) {
-                cout << "\x1B[31m"
+                cout << COLOR_RED
                      << "Password doesn't match!"
-                     << "\033[0m\n";
+                     << COLOR_END << "\n";
             }
 
             cout << "Retype password: ";
-            while ((ch = getch()) != KEY_ENTER) {
+            while ((ch = _getch()) != KEY_ENTER) {
                 if (ch == KEY_ESC) {
                     system("cls");
                     cout << "Return to main menu? (Y/N): ";
@@ -1014,7 +1063,7 @@ struct Menu {
         else {
             path = "User/Teacher/" + username + "txt";
         }
-        ofstream user(path, ios::in);
+        ofstream user(path, ios::out);
         user.clear();
         user << password;
         user.close();
