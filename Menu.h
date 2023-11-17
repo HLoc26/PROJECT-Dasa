@@ -855,7 +855,8 @@ struct Menu {
              << passInp << endl;
         _getch();
         */
-
+        // Create the folder
+        filesystem::create_directory(FILE_PATH + "User/Student/" + userInp);
         ofstream user(FILE_PATH + "User/Student/" + userInp + "/" + userInp + ".txt", ios::out);
         user << passInp;
         cout << FILE_PATH + "User/Student/" + userInp + "/" + userInp + ".txt";
@@ -873,10 +874,7 @@ struct Menu {
     // Trả về true nếu tên user không tồn tại = mở file fail
     bool CheckValidUsername(string userInp) {
         if (!filesystem::exists(userInp)) {
-            // Create the folder
-            filesystem::create_directory(FILE_PATH + "User/Student/" + userInp);
             return true;
-            cout << "Folder created successfully." << std::endl;
         }
         return false;
     }
