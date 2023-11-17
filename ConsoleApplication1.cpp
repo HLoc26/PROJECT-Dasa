@@ -2,6 +2,7 @@
 // ends there.
 //
 
+#include "CauHoi.h"
 #include "DLList.h"
 #include "DS.h"
 #include "Menu.h"

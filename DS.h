@@ -6,6 +6,9 @@
 #include <iostream>
 #include <string>
 
+#define FILE_PATH string("")
+// #define FILE_PATH string("C:/DASA/")
+
 using namespace std;
 
 #define MAX 100
@@ -39,9 +42,9 @@ struct DanhSach {
             chapter = "Chapter_3";
         }
 
-        string file_de = "NganHang/" + monhoc + "/" + chapter + "/CHDe.txt";
-        string file_tb = "NganHang/" + monhoc + "/" + chapter + "/CHTB.txt";
-        string file_kho = "NganHang/" + monhoc + "/" + chapter + "/CHKho.txt";
+        string file_de = FILE_PATH + "NganHang/" + monhoc + "/" + chapter + "/CHDe.txt";
+        string file_tb = FILE_PATH + "NganHang/" + monhoc + "/" + chapter + "/CHTB.txt";
+        string file_kho = FILE_PATH + "NganHang/" + monhoc + "/" + chapter + "/CHKho.txt";
         ifstream de(file_de, ios::in);
         ifstream tb(file_tb, ios::in);
         ifstream kho(file_kho, ios::in);

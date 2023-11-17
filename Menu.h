@@ -2,6 +2,7 @@
 #include "DLList.h"
 #include "DS.h"
 #include <conio.h>
+#include <filesystem>
 #include <fstream>
 #include <iomanip>
 #include <iostream>
@@ -528,7 +529,7 @@ struct Menu {
             folder = "Student";
         }
         // Mở file với tên <username>
-        ifstream user("User/" + folder + "/" + userInp + ".txt", ios::in);
+        ifstream user(FILE_PATH + "User/" + folder + "/" + userInp + "/" + userInp + ".txt", ios::in);
         // Nếu mở thành công == có tài khoản tên username
         if (!user.fail()) {
             string filePass;
@@ -855,8 +856,9 @@ struct Menu {
         _getch();
         */
 
-        ofstream user("User/Student/" + userInp + ".txt", ios::out);
+        ofstream user(FILE_PATH + "User/Student/" + userInp + "/" + userInp + ".txt", ios::out);
         user << passInp;
+        cout << FILE_PATH + "User/Student/" + userInp + "/" + userInp + ".txt";
         cout << "\x1B[32m\n"
              << "Successfully registered!"
              << "\033[0m\n";
@@ -870,13 +872,12 @@ struct Menu {
 
     // Trả về true nếu tên user không tồn tại = mở file fail
     bool CheckValidUsername(string userInp) {
-        ifstream inp("User/Student/" + userInp + ".txt", ios::in);
-        if (inp.fail()) {
-            inp.close();
+        if (!filesystem::exists(userInp)) {
+            // Create the folder
+            filesystem::create_directory(FILE_PATH + "User/Student/" + userInp);
             return true;
+            cout << "Folder created successfully." << std::endl;
         }
-        // false = mở file thành công, có user có tên đó
-        inp.close();
         return false;
     }
     // Trả về true nếu password dài hơn 8 ký tự, có chứa cả chữ và số
@@ -1058,10 +1059,10 @@ struct Menu {
         password = newPass2;
         string path;
         if (role == ERole::Student) {
-            path = "User/Student/" + username + "txt";
+            path = FILE_PATH + "User/Student/" + username + "/" + username + "txt";
         }
         else {
-            path = "User/Teacher/" + username + "txt";
+            path = FILE_PATH + "User/Teacher/" + username + "/" + username + "txt";
         }
         ofstream user(path, ios::out);
         user.clear();
