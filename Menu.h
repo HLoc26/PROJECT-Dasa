@@ -25,6 +25,9 @@
 #define COLOR_GREEN "\x1B[32m"
 #define COLOR_END "\033[0m"
 
+// Số lượng phần tử trong mảng lưu highscore trong hàm PrintHighScore
+#define CHAP_COUNT 9
+
 using namespace std;
 
 enum ERole {
@@ -92,6 +95,13 @@ struct Menu {
     string username = "";
     string password = "";
 
+    /* CONSTRUCTOR */
+    Menu(string username) {
+        this->username = username;
+    }
+    Menu() {
+        this->username = "";
+    }
     void StartMenu() {
         int option = 20000;
         while (true) {
@@ -300,7 +310,7 @@ struct Menu {
         }
         for (int i = 0; i < 4; i++) {
             if (i == option % 4) {
-                cout << COLOR_BLUE << "\t> " << options[i] << " <\033[0m\n";
+                cout << COLOR_BLUE << "\t> " << options[i] << " <" << COLOR_END << "\n";
             }
             else {
                 cout << "\t" << options[i] << "\n";
@@ -392,7 +402,7 @@ struct Menu {
         }
         for (int i = 0; i < 4; i++) {
             if (i == option % 4) {
-                cout << COLOR_BLUE << "\t> " << options[i] << " <\033[0m\n";
+                cout << COLOR_BLUE << "\t> " << options[i] << " <" << COLOR_END << "\n";
             }
             else {
                 cout << "\t" << options[i] << "\n";
@@ -732,7 +742,7 @@ struct Menu {
             if (!isValidUser) {
                 cout << "\x1B[31m"
                      << "Username is used!"
-                     << "\033[0m\n";
+                     << COLOR_END << "\n";
             }
             cout << "Username: ";
             while ((ch = _getch()) != KEY_ENTER) {
@@ -778,18 +788,10 @@ struct Menu {
             cout << "Username: " << userInp << endl;
             // Bắt đầu nhập password
             if (!isValidPass) {
-                cout << "\x1B[31m"
-                     << "Password must contain:"
-                     << "\033[0m\n";
-                cout << "\x1B[31m"
-                     << "               - More than 8 character"
-                     << "\033[0m\n";
-                cout << "\x1B[31m"
-                     << "               - Contains at least 1 digit"
-                     << "\033[0m\n";
-                cout << "\x1B[31m"
-                     << "               - Contains at least 1 alphabetic character"
-                     << "\033[0m\n";
+                cout << COLOR_RED << "Password must contain:" << COLOR_END << "\n";
+                cout << COLOR_RED << "               - More than 8 character" << COLOR_END << "\n";
+                cout << COLOR_RED << "               - Contains at least 1 digit" << COLOR_END << "\n";
+                cout << COLOR_RED << "               - Contains at least 1 alphabetic character" << COLOR_END << "\n";
             }
             else {
                 cout << "Password must contain: \n";
@@ -887,10 +889,8 @@ struct Menu {
         filesystem::create_directory(FILE_PATH + "User/Student/" + userInp);
         ofstream user(FILE_PATH + "User/Student/" + userInp + "/" + userInp + ".txt", ios::out);
         user << passInp;
-        cout << FILE_PATH + "User/Student/" + userInp + "/" + userInp + ".txt";
-        cout << "\x1B[32m\n"
-             << "Successfully registered!"
-             << "\033[0m\n";
+        /* cout << FILE_PATH + "User/Student/" + userInp + "/" + userInp + ".txt"; */
+        cout << COLOR_GREEN << "Successfully registered!" << COLOR_END << "\n";
         cout << "Press any button to return\n";
         user.close();
 
@@ -986,18 +986,10 @@ struct Menu {
 
             // Bắt đầu nhập password
             if (!isValidPass) {
-                cout << "\x1B[31m"
-                     << "Password must contain:"
-                     << "\033[0m\n";
-                cout << "\x1B[31m"
-                     << "               - More than 8 character"
-                     << "\033[0m\n";
-                cout << "\x1B[31m"
-                     << "               - Contains at least 1 digit"
-                     << "\033[0m\n";
-                cout << "\x1B[31m"
-                     << "               - Contains at least 1 alphabetic charater"
-                     << "\033[0m\n";
+                cout << COLOR_RED << "Password must contain:" << COLOR_END << "\n";
+                cout << COLOR_RED << "               - More than 8 character" << COLOR_END << "\n";
+                cout << COLOR_RED << "               - Contains at least 1 digit" << COLOR_END << "\n";
+                cout << COLOR_RED << "               - Contains at least 1 alphabetic character" << COLOR_END << "\n";
             }
             else {
                 cout << "Password must contain: \n";
@@ -1097,7 +1089,7 @@ struct Menu {
     }
 
     void StoreScores(const StudentScore &studentScore) {
-        string filePath = "C:/DASA/TEST PROJECT/ConsoleApplication1/User/Student/" + username + "/" + username + ".txt";
+        string filePath = FILE_PATH + "User/Student/" + username + "/" + username + ".txt";
         ofstream outFile(filePath, ios::app);
 
         if (outFile.is_open()) {
@@ -1105,10 +1097,10 @@ struct Menu {
             auto now = chrono::system_clock::to_time_t(chrono::system_clock::now());
             tm localTime{};
             localtime_s(&localTime, &now);
-
+            outFile << endl;
             outFile << put_time(&localTime, "%Y-%m-%d %H:%M:%S") << endl;
             outFile << setw(15) << left << "Subject" << setw(15) << "Chapter" << setw(10) << "Score" << endl;
-            outFile << setw(15) << left << studentScore.subject << setw(15) << studentScore.chapter << setw(10) << studentScore.score << endl;
+            outFile << setw(15) << left << studentScore.subject << setw(15) << studentScore.chapter << setw(10) << studentScore.score;
 
             outFile.close();
         }
@@ -1119,13 +1111,16 @@ struct Menu {
 
     void PrintHighestScores() {
         system("cls");
-        string filePath = "C:/DASA/TEST PROJECT/ConsoleApplication1/User/Student/" + username + "/" + username + ".txt";
+        string filePath = FILE_PATH + "User/Student/" + username + "/" + username + ".txt";
         ifstream inFile(filePath);
         if (inFile.is_open()) {
-            map<string, double> highestScores;
+            string *highScoreSubj = new string[CHAP_COUNT];
+            int *highScoreChap = new int[CHAP_COUNT];
+            double *highScore = new double[CHAP_COUNT]{0};
 
             string line;
             getline(inFile, line); // skip dòng password
+            int HIndex = 0;
             while (getline(inFile, line)) {
                 if (!line.empty()) {
                     getline(inFile, line);
@@ -1136,17 +1131,34 @@ struct Menu {
                     int chapter;
                     double score;
                     iss >> subject >> chapter >> score;
+                    if (HIndex == 0) {
+                        highScoreSubj[HIndex] = subject;
+                        highScoreChap[HIndex] = chapter;
+                        highScore[HIndex] = score;
+                        HIndex += 1;
+                    }
 
-                    // Tìm điểm lớn nhất của mỗi môn
-                    if (highestScores.find(subject) == highestScores.end() || score > highestScores[subject]) {
-                        highestScores[subject] = score;
+                    else if (HIndex > 0) {
+                        if (highScoreSubj[HIndex - 1] != subject || highScoreChap[HIndex - 1] != chapter) {
+                            highScoreSubj[HIndex] = subject;
+                            highScoreChap[HIndex] = chapter;
+                            highScore[HIndex] = score;
+                            HIndex += 1;
+                        }
+                        else {
+                            highScore[HIndex] = max(highScore[HIndex], score);
+                        }
                     }
                 }
             }
-            // Print the highest scores for each subject
-            cout << "Highest Scores:\n";
-            for (const auto &entry : highestScores) {
-                cout << "Subject: " << entry.first << "\tHighest Score: " << entry.second << endl;
+            cout << username << "'s high score" << endl;
+            cout << "================================\n";
+            // Print the highest scores for each subject and chapter
+            cout << setw(12) << left << "Subject"
+                 << setw(10) << left << "Chapter"
+                 << setw(10) << left << "High Score" << endl;
+            for (int i = 0; i < HIndex; i++) {
+                cout << setw(12) << left << highScoreSubj[i] << setw(10) << left << highScoreChap[i] << setw(10) << left << highScore[i] << endl;
             }
 
             inFile.close();
@@ -1154,16 +1166,7 @@ struct Menu {
         else {
             cerr << "Error opening file: " << filePath << endl;
         }
-
-        int ex = _getch();
-        if (ex == KEY_ESC) {
-            system("cls");
-            cout << "Return to main menu? (Y/N): ";
-            char o;
-            cin >> o;
-            if (tolower(o) == 'y') {
-                return;
-            }
-        }
+        cout << "Press any button to go back\n";
+        _getch();
     }
 };

@@ -11,6 +11,8 @@
 using namespace std;
 
 int main() {
-    Menu menu;
-    menu.StartMenu();
+    Menu menu = Menu("dat");
+    menu.PrintHighestScores();
+    /* Menu menu;
+    menu.StartMenu(); */
 }

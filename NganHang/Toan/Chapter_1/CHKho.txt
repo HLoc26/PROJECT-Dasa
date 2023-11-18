@@ -16,7 +16,7 @@ If sin(x)=1, what is the value of x?
 No value
 infinity
 C
-4.Solve for x in the equation:3^x - 2^{x+1} + 5 = 0 
+Solve for x in the equation:3^x - 2^{x+1} + 5 = 0 
 x = -1
 x = 1  
 x = 2  
