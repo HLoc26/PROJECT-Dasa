@@ -9,7 +9,6 @@
 #include <fstream>
 #include <iomanip>
 #include <iostream>
-#include <map>
 #include <thread>
 
 #define KEY_UP 72
