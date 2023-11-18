@@ -1,11 +1,15 @@
 #include "CauHoi.h"
 #include "DLList.h"
 #include "DS.h"
+
+#include <chrono>
 #include <conio.h>
+#include <ctime>
 #include <filesystem>
 #include <fstream>
 #include <iomanip>
 #include <iostream>
+#include <map>
 #include <thread>
 
 #define KEY_UP 72
@@ -48,6 +52,17 @@ enum ESubject {
     English
 };
 
+struct StudentScore {
+    string subject;
+    int chapter;
+    float score;
+    StudentScore(string subject, int chapter, float score) {
+        this->subject = subject;
+        this->chapter = chapter;
+        this->score = score;
+    }
+};
+
 /*
     - Cac ham Print... la de in cac options
     - Cac ham Menu la de chay logic chon option
@@ -87,16 +102,16 @@ struct Menu {
 
             if (ex == KEY_ENTER) {
                 switch (option % 4) {
-                // Studen Login
+                    // Studen Login
                 case Option1:
                     cout << "\nSTUDENT LOGIN\n";
                     Login(ERole::Student);
                     break;
-                // Student Signup
+                    // Student Signup
                 case Option2:
                     Register();
                     break;
-                // Teeacher Login
+                    // Teeacher Login
                 case Option3:
                     Login(ERole::Teacher);
                     break;
@@ -138,7 +153,7 @@ struct Menu {
                     break;
                 case Option2:
                     cout << "\nCheck result\n";
-                    // XemDiem();
+                    PrintHighestScores();
                     break;
                 case Option3:
                     ChangePass(ERole::Student);
@@ -574,16 +589,16 @@ struct Menu {
         DLList Question = DSCH.GetQuestions();
         Question.PrintList();
         system("cls");
-        Test(Question);
+        Test(Question, mon, chapter);
     }
-    // Bat dau lam bai test
-    void Test(DLList Question) {
-        CauHoi *chHienTai = Question.head;
 
+    // Bat dau lam bai test
+    void Test(DLList Question, string subject, int chapter) {
+        CauHoi *chHienTai = Question.head;
         int ans_pos = 0;
         string *ans = new string[Question.size]{""};
         int choices = 20000;
-        int totalScore = 0;
+        double totalScore = 0;
         int correctAnswers = 0;
         bool answered = false;
         bool *answeredCorrectly = new bool[Question.size]{false};
@@ -680,9 +695,22 @@ struct Menu {
                 char o;
                 cin >> o;
                 if (tolower(o) == 'y') {
-                    totalScore = correctAnswers * 10;
+                    totalScore = static_cast<double>(10) / Question.size * correctAnswers;
                     cout << "Your final score: " << totalScore << endl;
-                    exit(0);
+                    StudentScore ss = StudentScore(subject, chapter, totalScore);
+                    StoreScores(ss);
+                    if (ex == KEY_ESC) {
+                        system("cls");
+                        cout << "Return to main menu? (Y/N): ";
+                        char o;
+                        cin >> o;
+                        if (tolower(o) == 'y') {
+                            return;
+                        }
+                        else if (tolower(o) == 'n') {
+                            exit(0);
+                        }
+                    }
                 }
             }
         }
@@ -1066,5 +1094,76 @@ struct Menu {
         user.clear();
         user << password;
         user.close();
+    }
+
+    void StoreScores(const StudentScore &studentScore) {
+        string filePath = "C:/DASA/TEST PROJECT/ConsoleApplication1/User/Student/" + username + "/" + username + ".txt";
+        ofstream outFile(filePath, ios::app);
+
+        if (outFile.is_open()) {
+            // Lấy ngày giờ hiện tại
+            auto now = chrono::system_clock::to_time_t(chrono::system_clock::now());
+            tm localTime{};
+            localtime_s(&localTime, &now);
+
+            outFile << put_time(&localTime, "%Y-%m-%d %H:%M:%S") << endl;
+            outFile << setw(15) << left << "Subject" << setw(15) << "Chapter" << setw(10) << "Score" << endl;
+            outFile << setw(15) << left << studentScore.subject << setw(15) << studentScore.chapter << setw(10) << studentScore.score << endl;
+
+            outFile.close();
+        }
+        else {
+            cerr << "Error opening file: " << filePath << endl;
+        }
+    }
+
+    void PrintHighestScores() {
+        system("cls");
+        string filePath = "C:/DASA/TEST PROJECT/ConsoleApplication1/User/Student/" + username + "/" + username + ".txt";
+        ifstream inFile(filePath);
+        if (inFile.is_open()) {
+            map<string, double> highestScores;
+
+            string line;
+            getline(inFile, line); // skip dòng password
+            while (getline(inFile, line)) {
+                if (!line.empty()) {
+                    getline(inFile, line);
+                    // skip dòng có các cột subject, subject, .....
+                    getline(inFile, line);
+                    istringstream iss(line);
+                    string subject;
+                    int chapter;
+                    double score;
+                    iss >> subject >> chapter >> score;
+
+                    // Tìm điểm lớn nhất của mỗi môn
+                    if (highestScores.find(subject) == highestScores.end() || score > highestScores[subject]) {
+                        highestScores[subject] = score;
+                    }
+                }
+            }
+            // Print the highest scores for each subject
+            cout << "Highest Scores:\n";
+            for (const auto &entry : highestScores) {
+                cout << "Subject: " << entry.first << "\tHighest Score: " << entry.second << endl;
+            }
+
+            inFile.close();
+        }
+        else {
+            cerr << "Error opening file: " << filePath << endl;
+        }
+
+        int ex = _getch();
+        if (ex == KEY_ESC) {
+            system("cls");
+            cout << "Return to main menu? (Y/N): ";
+            char o;
+            cin >> o;
+            if (tolower(o) == 'y') {
+                return;
+            }
+        }
     }
 };
