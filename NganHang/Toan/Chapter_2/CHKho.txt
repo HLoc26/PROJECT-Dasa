@@ -1,0 +1,30 @@
+In triangle ABC, angle A measures 75 degrees, and the sides opposite angles A and B are of lengths 7 units and 10 units, respectively. What is the length of side AC?
+5 units
+8 units
+12 units
+15 units
+D
+A sphere is inscribed in a cone such that the sphere touches the base of the cone and the lateral surface of the cone. If the cone has a height of 12 units and a radius of 9 units, what is the radius of the inscribed sphere?
+3 units
+4 units
+6 units
+8 units
+B
+Consider a regular hexagon inscribed in a circle. If the area of the hexagon is 54√3 square units, what is the area of the circumscribed circle?
+18π square units
+36π square units
+54π square units
+72π square units
+D
+A torus is formed by rotating a circle of radius 5 units about an axis in its plane, creating a solid donut shape. What is the volume of this torus?
+50π cubic units
+100π cubic units
+125π cubic units
+250π cubic units
+B
+Given a rectangular prism with edges of length 3 units, 4 units, and 5 units, what is the longest possible distance between two distinct vertices inside the prism?
+6 units
+7 units
+8 units
+9 units
+C
