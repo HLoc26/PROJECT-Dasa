@@ -94,13 +94,6 @@ struct Menu {
     string username = "";
     string password = "";
 
-    /* CONSTRUCTOR */
-    Menu(string username) {
-        this->username = username;
-    }
-    Menu() {
-        this->username = "";
-    }
     void StartMenu() {
         int option = 20000;
         while (true) {
@@ -161,8 +154,8 @@ struct Menu {
                     SelectSubject();
                     break;
                 case Option2:
-                    cout << "\nCheck result\n";
-                    PrintHighestScores();
+                    system("cls");
+                    PrintHighestScores(username);
                     break;
                 case Option3:
                     ChangePass(ERole::Student);
@@ -205,8 +198,7 @@ struct Menu {
             if (ex == KEY_ENTER) {
                 switch (option % 4) {
                 case Option1:
-                    cout << "\nCheck Students' scores\n";
-                    // Hàm show score của HS
+                    PrintStudentsScore();
                     break;
                 case Option2:
                     cout << "\nAdd chapter\n";
@@ -893,6 +885,9 @@ struct Menu {
         cout << "Press any button to return\n";
         user.close();
 
+        ofstream teacher(FILE_PATH + "User/Teacher/StudentList.txt", ios::out);
+        teacher << userInp << endl;
+        teacher.close();
         _getch();
 
         return;
@@ -1108,9 +1103,8 @@ struct Menu {
         }
     }
 
-    void PrintHighestScores() {
-        system("cls");
-        string filePath = FILE_PATH + "User/Student/" + username + "/" + username + ".txt";
+    void PrintHighestScores(string uName, bool FromTeacher = false) {
+        string filePath = FILE_PATH + "User/Student/" + uName + "/" + uName + ".txt";
         ifstream inFile(filePath);
         if (inFile.is_open()) {
             string *highScoreSubj = new string[CHAP_COUNT];
@@ -1150,22 +1144,50 @@ struct Menu {
                     }
                 }
             }
-            cout << username << "'s high score" << endl;
+            cout << uName << "'s high score" << endl;
             cout << "================================\n";
-            // Print the highest scores for each subject and chapter
-            cout << setw(12) << left << "Subject"
-                 << setw(10) << left << "Chapter"
-                 << setw(10) << left << "High Score" << endl;
-            for (int i = 0; i < HIndex; i++) {
-                cout << setw(12) << left << highScoreSubj[i] << setw(10) << left << highScoreChap[i] << setw(10) << left << highScore[i] << endl;
+            if (HIndex == 0) {
+                cout << "This student has not taken any test yet\n";
             }
+            else {
+                // Print the highest scores for each subject and chapter
+                cout << setw(12) << left << "Subject"
+                     << setw(10) << left << "Chapter"
+                     << setw(10) << left << "High Score" << endl;
 
+                for (int i = 0; i < HIndex; i++) {
+                    cout << setw(12) << left << highScoreSubj[i] << setw(10) << left << highScoreChap[i] << setw(10) << left << highScore[i] << endl;
+                }
+                cout << "================================\n\n";
+            }
             inFile.close();
         }
         else {
             cerr << "Error opening file: " << filePath << endl;
         }
-        cout << "Press any button to go back\n";
-        _getch();
+        if (!FromTeacher) {
+            cout << "Press any button to go back\n";
+            _getch();
+        }
+    }
+
+    void PrintStudentsScore() {
+        cout << "STUDENT'S HIGHSCORE" << endl;
+        cout << "================================\n";
+        ifstream list(FILE_PATH + "User/Teacher/StudentList.txt", ios::in);
+
+        string *SList = new string[1000];
+        string uName;
+        int size = 0;
+        while (list >> uName) {
+            SList[size] = uName;
+            size += 1;
+        }
+
+        list.close();
+        for (int i = 0; i < size; i++) {
+            string name = SList[i];
+            PrintHighestScores(name, true);
+        }
     }
 };
