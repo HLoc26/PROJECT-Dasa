@@ -1,0 +1,19 @@
+253106aa
+2023-11-19 01:38:42
+Subject        Chapter        Score     
+Toan           1              10        
+2023-11-19 01:38:59
+Subject        Chapter        Score     
+Toan           2              5         
+2023-11-19 01:39:22
+Subject        Chapter        Score     
+Hoa            1              4         
+2023-11-19 01:39:35
+Subject        Chapter        Score     
+Hoa            1              1.334         
+2023-11-19 01:40:02
+Subject        Chapter        Score     
+Hoa            2              6        
+2023-11-19 01:40:22
+Subject        Chapter        Score     
+Hoa            2              3       
