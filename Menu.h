@@ -1,17 +1,15 @@
-﻿#include "CauHoi.h"
+#include "CauHoi.h"
 #include "DLList.h"
 #include "DS.h"
 
+#include <chrono>
 #include <conio.h>
+#include <ctime>
+#include <filesystem>
 #include <fstream>
 #include <iomanip>
 #include <iostream>
 #include <thread>
-#include <filesystem>
-#include <ctime>
-#include <chrono>
-#include <map>
-
 
 #define KEY_UP 72
 #define KEY_DOWN 80
@@ -25,6 +23,9 @@
 #define COLOR_BLUE "\x1B[36m"
 #define COLOR_GREEN "\x1B[32m"
 #define COLOR_END "\033[0m"
+
+// Số lượng phần tử trong mảng lưu highscore trong hàm PrintHighScore
+#define CHAP_COUNT 9
 
 using namespace std;
 
@@ -63,30 +64,24 @@ struct StudentScore {
         this->score = score;
     }
 };
-
 /*
-    - Cac ham Print... la de in cac options
-    - Cac ham Menu la de chay logic chon option
+    StartMenu
+    StudentMenu
+    TeacherMenu
+    SelectSubject
+    PrintMenu
+    SelectChapter
+    PrintMenu (Chapter)
+
+    StartTest
+    Test
+
+    Login
+    LogInAnimate
+    CheckValidLogin
+
+    Register
  */
-
- /*
-     StartMenu
-     StudentMenu
-     TeacherMenu
-     SelectSubject
-     PrintMenu
-     SelectChapter
-     PrintMenu (Chapter)
-
-     StartTest
-     Test
-
-     Login
-     LogInAnimate
-     CheckValidLogin
-
-     Register
-  */
 
 struct Menu {
 
@@ -153,8 +148,8 @@ struct Menu {
                     SelectSubject();
                     break;
                 case Option2:
-                    cout << "\nCheck result\n";
-                    PrintHighestScores();
+                    system("cls");
+                    PrintHighestScores(username);
                     break;
                 case Option3:
                     ChangePass(ERole::Student);
@@ -197,8 +192,7 @@ struct Menu {
             if (ex == KEY_ENTER) {
                 switch (option % 4) {
                 case Option1:
-                    cout << "\nCheck Students' scores\n";
-                    // Hàm show score của HS
+                    PrintStudentsScore();
                     break;
                 case Option2:
                     cout << "\nAdd chapter\n";
@@ -208,9 +202,14 @@ struct Menu {
                     ChangePass(ERole::Teacher);
                     break;
                 case Option4:
-                    cout << "Log Out";
-                    username.clear();
-                    password.clear();
+                    cout << "Do you want to log out? (Y/N): ";
+                    char o;
+                    cin >> o;
+                    if (tolower(o) == 'y') {
+                        username.clear();
+                        password.clear();
+                        StartMenu();
+                    }
                     return;
                 default:
                     break;
@@ -272,36 +271,36 @@ struct Menu {
         string options[4];
         int size;
         if (type == EMenu::MainM) {
-            string temp[] = { "Student Login",
+            string temp[] = {"Student Login",
                              "Student Register",
                              "Teacher Login",
-                             "Exit" };
+                             "Exit"};
             copy(begin(temp), end(temp), begin(options));
         }
         else if (type == EMenu::TeacherM) {
-            string temp[] = { "See Students' Scores",
+            string temp[] = {"See Students' Scores",
                              "Add Questions",
                              "Change Password",
-                             "Log out" };
+                             "Log out"};
             copy(begin(temp), end(temp), begin(options));
         }
         else if (type == EMenu::StudentM) {
-            string temp[] = { "Practice Test",
+            string temp[] = {"Practice Test",
                              "See Scores",
                              "Change Password",
-                             "Log out" };
+                             "Log out"};
             copy(begin(temp), end(temp), begin(options));
         }
         else if (type == EMenu::SubjectM) {
-            string temp[] = { "Math",
+            string temp[] = {"Math",
                              "English",
                              "Chemistry",
-                             "Return" };
+                             "Return"};
             copy(begin(temp), end(temp), begin(options));
         }
         for (int i = 0; i < 4; i++) {
             if (i == option % 4) {
-                cout << COLOR_BLUE << "\t> " << options[i] << " <\033[0m\n";
+                cout << COLOR_BLUE << "\t> " << options[i] << " <" << COLOR_END << "\n";
             }
             else {
                 cout << "\t" << options[i] << "\n";
@@ -368,32 +367,32 @@ struct Menu {
             break;
         }
         cout << endl
-            << mon << endl;
+             << mon << endl;
         string options[4];
         if (monhoc == ESubject::Math) {
-            string temp[] = { "Chapter 1: Decimal Number",
+            string temp[] = {"Chapter 1: Decimal Number",
                              "Chapter 2: Math2",
                              "Chapter 3: Math3",
-                             "Return" };
+                             "Return"};
             copy(begin(temp), end(temp), begin(options));
         }
         else if (monhoc == ESubject::English) {
-            string temp[] = { "Chapter 1: E1",
+            string temp[] = {"Chapter 1: E1",
                              "Chapter 2: E2",
                              "Chapter 3: E3",
-                             "Return" };
+                             "Return"};
             copy(begin(temp), end(temp), begin(options));
         }
         else if (monhoc == ESubject::Chemistry) {
-            string temp[] = { "Chapter 1: Oxygen",
+            string temp[] = {"Chapter 1: Oxygen",
                              "Chapter 2: Bases",
                              "Chapter 3: Acids",
-                             "Return" };
+                             "Return"};
             copy(begin(temp), end(temp), begin(options));
         }
         for (int i = 0; i < 4; i++) {
             if (i == option % 4) {
-                cout << COLOR_BLUE << "\t> " << options[i] << " <\033[0m\n";
+                cout << COLOR_BLUE << "\t> " << options[i] << " <" << COLOR_END << "\n";
             }
             else {
                 cout << "\t" << options[i] << "\n";
@@ -487,9 +486,9 @@ struct Menu {
             // Kiểm tra tài khoản mật khẩu đúng kkhông
             if (!CheckValidLogin(userInp, passInp, role)) {
                 cout << "\n"
-                    << COLOR_RED
-                    << "Wrong password or username!"
-                    << COLOR_END << "\n\n";
+                     << COLOR_RED
+                     << "Wrong password or username!"
+                     << COLOR_END << "\n\n";
                 passInp = "";
                 userInp = "";
                 _getch();
@@ -498,9 +497,9 @@ struct Menu {
                 username = userInp;
                 password = passInp;
                 cout << endl
-                    << COLOR_GREEN
-                    << "Succeed!"
-                    << COLOR_END << "\n";
+                     << COLOR_GREEN
+                     << "Succeed!"
+                     << COLOR_END << "\n";
                 cout << "Press any button to continue!\n";
                 _getch();
                 system("cls");
@@ -528,8 +527,8 @@ struct Menu {
         for (int i = 0; i < time; i++) {
             system("cls");
             cout << COLOR_GREEN
-                << "Succeed!"
-                << COLOR_END << "\n";
+                 << "Succeed!"
+                 << COLOR_END << "\n";
             cout << "Logging in" << string((i + 1) % 4, '.');
             this_thread::sleep_for(chrono::seconds(1));
         }
@@ -538,14 +537,15 @@ struct Menu {
     // Kiểm tra xem TK và MK có hợp lệ không
     bool CheckValidLogin(string userInp, string passInp, ERole role) {
         string folder = "";
+        // Mở file với tên <username>
         if (role == ERole::Teacher) {
             folder = "Teacher";
         }
         else {
             folder = "Student";
         }
-        // Mở file với tên <username>
-        ifstream user(FILE_PATH + "User/" + folder + "/" + userInp + "/" + userInp + ".txt", ios::in);
+        ifstream user(FILE_PATH + "User/" + folder + "/" + userInp + ".txt", ios::in);
+
         // Nếu mở thành công == có tài khoản tên username
         if (!user.fail()) {
             string filePass;
@@ -592,19 +592,17 @@ struct Menu {
         system("cls");
         Test(Question, mon, chapter);
     }
-    
 
     // Bat dau lam bai test
     void Test(DLList Question, string subject, int chapter) {
-        CauHoi* chHienTai = Question.head;
+        CauHoi *chHienTai = Question.head;
         int ans_pos = 0;
-        string* ans = new string[Question.size]{ "" };
+        string *ans = new string[Question.size]{""};
         int choices = 20000;
         double totalScore = 0;
         int correctAnswers = 0;
         bool answered = false;
-        bool* answeredCorrectly = new bool[Question.size] {false};
-        
+        bool *answeredCorrectly = new bool[Question.size]{false};
 
         while (true) {
             system("cls");
@@ -734,8 +732,8 @@ struct Menu {
             int ch;
             if (!isValidUser) {
                 cout << "\x1B[31m"
-                    << "Username is used!"
-                    << "\033[0m\n";
+                     << "Username is used!"
+                     << COLOR_END << "\n";
             }
             cout << "Username: ";
             while ((ch = _getch()) != KEY_ENTER) {
@@ -781,18 +779,10 @@ struct Menu {
             cout << "Username: " << userInp << endl;
             // Bắt đầu nhập password
             if (!isValidPass) {
-                cout << "\x1B[31m"
-                    << "Password must contain:"
-                    << "\033[0m\n";
-                cout << "\x1B[31m"
-                    << "               - More than 8 character"
-                    << "\033[0m\n";
-                cout << "\x1B[31m"
-                    << "               - Contains at least 1 digit"
-                    << "\033[0m\n";
-                cout << "\x1B[31m"
-                    << "               - Contains at least 1 alphabetic character"
-                    << "\033[0m\n";
+                cout << COLOR_RED << "Password must contain:" << COLOR_END << "\n";
+                cout << COLOR_RED << "               - More than 8 character" << COLOR_END << "\n";
+                cout << COLOR_RED << "               - Contains at least 1 digit" << COLOR_END << "\n";
+                cout << COLOR_RED << "               - Contains at least 1 alphabetic character" << COLOR_END << "\n";
             }
             else {
                 cout << "Password must contain: \n";
@@ -848,8 +838,8 @@ struct Menu {
             cout << "Password: " << string(passInp.length(), '*') << endl;
             if (!isValidPass2) {
                 cout << COLOR_RED
-                    << "Password doesn't match!"
-                    << COLOR_END << "\n";
+                     << "Password doesn't match!"
+                     << COLOR_END << "\n";
             }
 
             cout << "Retype password: ";
@@ -888,15 +878,15 @@ struct Menu {
         */
         // Create the folder
         filesystem::create_directory(FILE_PATH + "User/Student/" + userInp);
-        ofstream user(FILE_PATH + "User/Student/" + userInp + "/" + userInp + ".txt", ios::out);
+        ofstream user(FILE_PATH + "User/Student/" + userInp + ".txt", ios::out);
         user << passInp;
-        cout << FILE_PATH + "User/Student/" + userInp + "/" + userInp + ".txt";
-        cout << "\x1B[32m\n"
-            << "Successfully registered!"
-            << "\033[0m\n";
+        cout << COLOR_GREEN << "Successfully registered!" << COLOR_END << "\n";
         cout << "Press any button to return\n";
         user.close();
 
+        ofstream teacher(FILE_PATH + "User/Teacher/StudentList.txt", ios::out);
+        teacher << userInp << endl;
+        teacher.close();
         _getch();
 
         return;
@@ -944,8 +934,8 @@ struct Menu {
             cout << "Username: " << username << endl;
             if (!isValidOld) {
                 cout << COLOR_RED
-                    << "Password doesn't match!"
-                    << COLOR_END << "\n";
+                     << "Password doesn't match!"
+                     << COLOR_END << "\n";
             };
             cout << "Old password: ";
             while ((ch = _getch()) != KEY_ENTER) {
@@ -989,18 +979,10 @@ struct Menu {
 
             // Bắt đầu nhập password
             if (!isValidPass) {
-                cout << "\x1B[31m"
-                    << "Password must contain:"
-                    << "\033[0m\n";
-                cout << "\x1B[31m"
-                    << "               - More than 8 character"
-                    << "\033[0m\n";
-                cout << "\x1B[31m"
-                    << "               - Contains at least 1 digit"
-                    << "\033[0m\n";
-                cout << "\x1B[31m"
-                    << "               - Contains at least 1 alphabetic charater"
-                    << "\033[0m\n";
+                cout << COLOR_RED << "Password must contain:" << COLOR_END << "\n";
+                cout << COLOR_RED << "               - More than 8 character" << COLOR_END << "\n";
+                cout << COLOR_RED << "               - Contains at least 1 digit" << COLOR_END << "\n";
+                cout << COLOR_RED << "               - Contains at least 1 alphabetic character" << COLOR_END << "\n";
             }
             else {
                 cout << "Password must contain: \n";
@@ -1052,8 +1034,8 @@ struct Menu {
 
             if (!isValidPass2) {
                 cout << COLOR_RED
-                    << "Password doesn't match!"
-                    << COLOR_END << "\n";
+                     << "Password doesn't match!"
+                     << COLOR_END << "\n";
             }
 
             cout << "Retype password: ";
@@ -1088,10 +1070,10 @@ struct Menu {
         password = newPass2;
         string path;
         if (role == ERole::Student) {
-            path = FILE_PATH + "User/Student/" + username + "/" + username + "txt";
+            path = FILE_PATH + "User/Student/" + username + "txt";
         }
         else {
-            path = FILE_PATH + "User/Teacher/" + username + "/" + username + "txt";
+            path = FILE_PATH + "User/Teacher/" + username + "txt";
         }
         ofstream user(path, ios::out);
         user.clear();
@@ -1099,19 +1081,19 @@ struct Menu {
         user.close();
     }
 
-    void StoreScores(const StudentScore& studentScore) {
-        string filePath = "C:/DASA/TEST PROJECT/ConsoleApplication1/User/Student/" + username + "/" + username + ".txt";
+    void StoreScores(const StudentScore &studentScore) {
+        string filePath = FILE_PATH + "User/Student/" + username + ".txt";
         ofstream outFile(filePath, ios::app);
 
         if (outFile.is_open()) {
-            //Lấy ngày giờ hiện tại
+            // Lấy ngày giờ hiện tại
             auto now = chrono::system_clock::to_time_t(chrono::system_clock::now());
             tm localTime{};
             localtime_s(&localTime, &now);
- 
+            outFile << endl;
             outFile << put_time(&localTime, "%Y-%m-%d %H:%M:%S") << endl;
             outFile << setw(15) << left << "Subject" << setw(15) << "Chapter" << setw(10) << "Score" << endl;
-            outFile << setw(15) << left << studentScore.subject << setw(15) << studentScore.chapter << setw(10) << studentScore.score << endl;
+            outFile << setw(15) << left << studentScore.subject << setw(15) << studentScore.chapter << setw(10) << studentScore.score;
 
             outFile.close();
         }
@@ -1119,54 +1101,235 @@ struct Menu {
             cerr << "Error opening file: " << filePath << endl;
         }
     }
-    
-    void PrintHighestScores() {
-        system("cls");
-        string filePath = "C:/DASA/TEST PROJECT/ConsoleApplication1/User/Student/" + username + "/" + username + ".txt";
+
+    void PrintHighestScores(string uName, bool FromTeacher = false) {
+        string filePath = FILE_PATH + "User/Student/" + uName + ".txt";
         ifstream inFile(filePath);
         if (inFile.is_open()) {
-            map<string, double> highestScores;
+            string *highScoreSubj = new string[CHAP_COUNT];
+            int *highScoreChap = new int[CHAP_COUNT];
+            double *highScore = new double[CHAP_COUNT]{0};
 
             string line;
-            getline(inFile, line);  //skip dòng password
+            getline(inFile, line); // skip dòng password
+            int HIndex = 0;
             while (getline(inFile, line)) {
                 if (!line.empty()) {
                     getline(inFile, line);
-                    //skip dòng có các cột subject, subject, .....
+                    // skip dòng có các cột subject, subject, .....
                     getline(inFile, line);
                     istringstream iss(line);
                     string subject;
                     int chapter;
                     double score;
                     iss >> subject >> chapter >> score;
+                    if (HIndex == 0) {
+                        highScoreSubj[HIndex] = subject;
+                        highScoreChap[HIndex] = chapter;
+                        highScore[HIndex] = score;
+                        HIndex += 1;
+                    }
 
-                    // Tìm điểm lớn nhất của mỗi môn
-                    if (highestScores.find(subject) == highestScores.end() || score > highestScores[subject]) {
-                        highestScores[subject] = score;
+                    else if (HIndex > 0) {
+                        if (highScoreSubj[HIndex - 1] != subject || highScoreChap[HIndex - 1] != chapter) {
+                            highScoreSubj[HIndex] = subject;
+                            highScoreChap[HIndex] = chapter;
+                            highScore[HIndex] = score;
+                            HIndex += 1;
+                        }
+                        else {
+                            highScore[HIndex] = max(highScore[HIndex], score);
+                        }
                     }
                 }
             }
-            // Print the highest scores for each subject
-            cout << "Highest Scores:\n";
-            for (const auto& entry : highestScores) {
-                cout << "Subject: " << entry.first << "\tHighest Score: " << entry.second << endl;
+            cout << uName << "'s high score" << endl;
+            cout << "================================\n";
+            if (HIndex == 0) {
+                cout << "This student has not taken any test yet\n\n";
             }
+            else {
+                // Print the highest scores for each subject and chapter
+                cout << setw(12) << left << "Subject"
+                     << setw(10) << left << "Chapter"
+                     << setw(10) << left << "High Score" << endl;
 
+                for (int i = 0; i < HIndex; i++) {
+                    cout << setw(12) << left << highScoreSubj[i] << setw(10) << left << highScoreChap[i] << setw(10) << left << highScore[i] << endl;
+                }
+                cout << "================================\n\n";
+            }
             inFile.close();
         }
         else {
             cerr << "Error opening file: " << filePath << endl;
         }
+        if (!FromTeacher) {
+            cout << "Press any button to go back\n";
+            _getch();
+        }
+    }
+
+    void PrintStudentsScore() {
+        system("cls");
+        cout << "STUDENT'S HIGHSCORE" << endl;
+        cout << "================================\n";
+        ifstream list(FILE_PATH + "User/Teacher/StudentList.txt", ios::in);
+
+        string *SList = new string[1000];
+        string uName;
+        int size = 0;
+        while (list >> uName) {
+            SList[size] = uName;
+            size += 1;
+        }
+        list.close();
+
+        cout << "\nSORT:\n\t1. Ascending by Username\n\t2. Ascending by GPA\n\n";
+
+        for (int i = 0; i < size; i++) {
+            string name = SList[i];
+            PrintHighestScores(name, true);
+        }
+        cout << "Press ENTER to go back\n";
+
+        double* averageScores = new double[size];
+        for (int i = 0; i < size; i++) {
+            string studentName = SList[i];
+            double totalScore = 0.0;
+            int count = 0;
+        }
+
+        PrintSortedScore(SList, size);
 
         int ex = _getch();
-        if (ex == KEY_ESC) {
-            system("cls");
-            cout << "Return to main menu? (Y/N): ";
-            char o;
-            cin >> o;
-            if (tolower(o) == 'y') {
-                return;
-            }
+        switch (ex) {
+        case 49:
+            QuickSortName(SList, 0, size - 1);
+            //PrintSortedScore(SList, 0, size - 1);
+            break;
+        case 50:
+            /* Sort by GPA */
+            break;
+        case 13:
+            return;
+        default:
+            break;
         }
+    }
+
+    void QuickSortedScore(double* averageScores, string name[], int left, int right) {
+        int i, j;
+        string x;
+        double avgScore;
+        x = name[(left + right) / 2];
+        /*
+        double* averageScores = new double[CHAP_COUNT] {0};
+
+        for (int k = 0; k < CHAP_COUNT; k++) {
+            averageScores[k] = CalculateAverageScore(uName, name);
+        }
+        */
+        avgScore = averageScores[(left + right) / 2];
+        i = left;
+        j = right;
+        do {
+            while (averageScores[i] < avgScore)
+                i++;
+            while (averageScores[j] > avgScore)
+                j--;
+            if (i <= j) {
+                swap(name[i], name[j]);
+                swap(averageScores[i], averageScores[j]);
+                i++;
+                j--;
+            }
+        } while (i <= j);
+        if (left < j) QuickSortedScore(averageScores, name, left, j);
+        if (i < right) QuickSortedScore(averageScores, name, i, right);
+    }
+
+
+    void PrintSortedScore(string SList[], int size) {
+
+        double* averageScores = new double[size];
+        for (int i = 0; i < size; i++) {
+            averageScores[i] = CalculateAverageScore(SList[i]);
+        }
+        QuickSortedScore(averageScores, SList, 0, size - 1);
+
+        cout << "\nSorted Scores (Ascending Order)\n";
+        cout << "================================\n";
+        cout << setw(15) << left << "Username" << setw(15) << "Average Score" << endl;  
+
+        for (int i = 0; i < size; i++) {
+            cout << setw(15) << left << SList[i] << setw(15) << averageScores[i] << endl;
+        }
+        cout << "================================\n";
+    }
+
+    double CalculateAverageScore(string uName) {
+        string filePath = FILE_PATH + "User/Student/" + uName + ".txt";
+        ifstream inFile(filePath);
+
+        if (inFile.is_open()) {
+            double* highScore = new double[CHAP_COUNT] {0};
+
+            string line;
+            getline(inFile, line);
+            int HIndex = 0;
+            //ERROR
+            while (getline(inFile, line)) {
+                if (!line.empty()) {
+                    getline(inFile, line);
+                    istringstream iss(line);
+                    string subject;
+                    int chapter;
+                    double score = 0;
+                    iss >> subject >> chapter >> score;
+                    if (HIndex == 0) {
+                        highScore[HIndex] = score;
+                        HIndex += 1;
+                    }
+
+                    else if (HIndex > 0) {
+                            highScore[HIndex] = score;
+                            HIndex += 1;
+                    }
+                    else {
+                            highScore[HIndex] = max(highScore[HIndex], score);
+                    }
+                }
+            }
+
+            double totalScore = 0;
+            for (int i = 0; i < HIndex; i++) {
+                totalScore += highScore[i];
+            }
+            double averageScore = totalScore / HIndex;
+            //cout << uName << " " << averageScore << endl;
+            return averageScore;
+        }
+    }
+
+    void QuickSortName(string name[], int left, int right) {
+        int i, j;
+        string x;
+        x = name[(left + right) / 2];
+        i = left;
+        j = right;
+        do {
+            while (name[i] < x)
+                i++;
+            while (name[j] > x)
+                j--;
+            if (i <= j) {
+                swap(name[i], name[j]);
+                i++;
+                j--;
+            }
+        } while (i < j);
+        if (left < j) QuickSortName(name, left, j);
+        if (i < right) QuickSortName(name, i, right);
     }
 };
