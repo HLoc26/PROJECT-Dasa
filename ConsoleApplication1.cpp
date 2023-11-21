@@ -11,8 +11,8 @@
 using namespace std;
 
 int main() {
+    /*Menu menu;
+    menu.PrintStudentsScore(); */
     Menu menu;
-    menu.PrintStudentsScore();
-    /* Menu menu;
-    menu.StartMenu(); */
+    menu.StartMenu();
 }

@@ -208,9 +208,14 @@ struct Menu {
                     ChangePass(ERole::Teacher);
                     break;
                 case Option4:
-                    cout << "Log Out";
-                    username.clear();
-                    password.clear();
+                    cout << "Do you want to log out? (Y/N): ";
+                    char o;
+                    cin >> o;
+                    if (tolower(o) == 'y') {
+                        username.clear();
+                        password.clear();
+                        StartMenu();
+                    }
                     return;
                 default:
                     break;
@@ -538,14 +543,15 @@ struct Menu {
     // Kiểm tra xem TK và MK có hợp lệ không
     bool CheckValidLogin(string userInp, string passInp, ERole role) {
         string folder = "";
+        // Mở file với tên <username>
         if (role == ERole::Teacher) {
             folder = "Teacher";
         }
         else {
             folder = "Student";
         }
-        // Mở file với tên <username>
-        ifstream user(FILE_PATH + "User/" + folder + "/" + userInp + "/" + userInp + ".txt", ios::in);
+        ifstream user(FILE_PATH + "User/" + folder + "/" + userInp + ".txt", ios::in);
+
         // Nếu mở thành công == có tài khoản tên username
         if (!user.fail()) {
             string filePass;
@@ -878,9 +884,8 @@ struct Menu {
         */
         // Create the folder
         filesystem::create_directory(FILE_PATH + "User/Student/" + userInp);
-        ofstream user(FILE_PATH + "User/Student/" + userInp + "/" + userInp + ".txt", ios::out);
+        ofstream user(FILE_PATH + "User/Student/" + userInp + ".txt", ios::out);
         user << passInp;
-        /* cout << FILE_PATH + "User/Student/" + userInp + "/" + userInp + ".txt"; */
         cout << COLOR_GREEN << "Successfully registered!" << COLOR_END << "\n";
         cout << "Press any button to return\n";
         user.close();
@@ -1071,10 +1076,10 @@ struct Menu {
         password = newPass2;
         string path;
         if (role == ERole::Student) {
-            path = FILE_PATH + "User/Student/" + username + "/" + username + "txt";
+            path = FILE_PATH + "User/Student/" + username + "txt";
         }
         else {
-            path = FILE_PATH + "User/Teacher/" + username + "/" + username + "txt";
+            path = FILE_PATH + "User/Teacher/" + username + "txt";
         }
         ofstream user(path, ios::out);
         user.clear();
@@ -1083,7 +1088,7 @@ struct Menu {
     }
 
     void StoreScores(const StudentScore &studentScore) {
-        string filePath = FILE_PATH + "User/Student/" + username + "/" + username + ".txt";
+        string filePath = FILE_PATH + "User/Student/" + username + ".txt";
         ofstream outFile(filePath, ios::app);
 
         if (outFile.is_open()) {
@@ -1104,7 +1109,7 @@ struct Menu {
     }
 
     void PrintHighestScores(string uName, bool FromTeacher = false) {
-        string filePath = FILE_PATH + "User/Student/" + uName + "/" + uName + ".txt";
+        string filePath = FILE_PATH + "User/Student/" + uName + ".txt";
         ifstream inFile(filePath);
         if (inFile.is_open()) {
             string *highScoreSubj = new string[CHAP_COUNT];
@@ -1147,7 +1152,7 @@ struct Menu {
             cout << uName << "'s high score" << endl;
             cout << "================================\n";
             if (HIndex == 0) {
-                cout << "This student has not taken any test yet\n";
+                cout << "This student has not taken any test yet\n\n";
             }
             else {
                 // Print the highest scores for each subject and chapter
@@ -1172,9 +1177,10 @@ struct Menu {
     }
 
     void PrintStudentsScore() {
+        system("cls");
         cout << "STUDENT'S HIGHSCORE" << endl;
         cout << "================================\n";
-        ifstream list(FILE_PATH + "User/Teacher/StudentList.txt", ios::in);
+        ifstream list(FILE_PATH + "User/Teacher/StudentList.txt", ios::app);
 
         string *SList = new string[1000];
         string uName;
@@ -1189,5 +1195,7 @@ struct Menu {
             string name = SList[i];
             PrintHighestScores(name, true);
         }
+        cout << "Press any button to go back\n";
+        _getch();
     }
 };
