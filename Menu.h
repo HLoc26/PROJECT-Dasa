@@ -25,7 +25,7 @@
 #define COLOR_END "\033[0m"
 
 // Số lượng phần tử trong mảng lưu highscore trong hàm PrintHighScore
-#define CHAP_COUNT 9
+#define CHAP_COUNT 9 // để đó để test
 
 using namespace std;
 
@@ -1157,6 +1157,7 @@ struct Menu {
                 for (int i = 0; i < HIndex; i++) {
                     cout << setw(12) << left << highScoreSubj[i] << setw(10) << left << highScoreChap[i] << setw(10) << left << highScore[i] << endl;
                 }
+                cout << CalculateGPA(uName) << endl;
                 cout << "================================\n\n";
             }
             inFile.close();
@@ -1200,10 +1201,10 @@ struct Menu {
             PrintSortedScore(SList, size);
             break;
         case 50:
-            /* Sort by GPA */
+            SortStudentScore(SList, size);
             break;
         case 13:
-            return;
+            TeacherMenu();
         default:
             break;
         }
@@ -1213,6 +1214,7 @@ struct Menu {
         system("cls");
         cout << "STUDENT'S HIGHSCORE" << endl;
         cout << "================================\n";
+        cout << "\nSORT:\n\t1. Ascending by Username\n\t2. Ascending by GPA\n\n";
 
         for (int i = 0; i < size; i++) {
             string name = SList[i];
@@ -1226,10 +1228,10 @@ struct Menu {
             PrintSortedScore(SList, size);
             break;
         case 50:
-            /* Sort by GPA */
+            SortStudentScore(SList, size);
             break;
         case 13:
-            return;
+            PrintStudentsScore();
         default:
             break;
         }
@@ -1255,4 +1257,133 @@ struct Menu {
         if (left < j) QuickSortName(name, left, j);
         if (i < right) QuickSortName(name, i, right);
     }
+    void SortStudentScore(string SList[], int size) {
+
+        int StudentCount = size;
+        // Tạo một ma trận có cấu trúc:
+        /* {[TenHS1, Diem],
+            [TenHS2, Diem],
+            ...
+            }*/
+        string **Student_GPA = new string *[StudentCount];
+
+        for (int i = 0; i < StudentCount; i++) {
+            Student_GPA[i] = new string[2];
+        }
+        for (int i = 0; i < StudentCount; i++) {
+            Student_GPA[i][0] = SList[i];
+            string uName = Student_GPA[i][0];
+            Student_GPA[i][1] = CalculateGPA(uName);
+        }
+
+        QuickSortGPA(Student_GPA, 0, StudentCount - 1);
+        system("cls");
+        cout << "STUDENT'S HIGHSCORE" << endl;
+        cout << "================================\n";
+        cout << "\nSORT:\n\t1. Ascending by Username\n\t2. Ascending by GPA\n\n";
+
+        for (int i = 0; i < StudentCount; i++) {
+            PrintHighestScores(Student_GPA[i][0], true);
+        }
+
+        cout << "Press ENTER to go back\n";
+        int ex = _getch();
+        switch (ex) {
+        case 49:
+            QuickSortName(SList, 0, size - 1);
+            PrintSortedScore(SList, size);
+            break;
+        case 50:
+            SortStudentScore(SList, size);
+            break;
+        case 13:
+            PrintStudentsScore();
+        default:
+            break;
+        }
+    };
+
+    void SwapRows(string **Student_GPA, int i, int j) {
+        swap(Student_GPA[i][0], Student_GPA[j][0]); // Swap Tên
+        swap(Student_GPA[i][1], Student_GPA[j][1]); // Swap Điểm
+    }
+
+    void QuickSortGPA(string **Student_GPA, int left, int right) {
+        int i, j;
+        string x;
+        x = Student_GPA[(left + right) / 2][1]; // Chọn điểm làm điểm chốt
+
+        i = left;
+        j = right;
+        do {
+            while (stoi(Student_GPA[i][1]) > stoi(x))
+                i++;
+            while (stoi(Student_GPA[j][1]) < stoi(x))
+                j--;
+            if (i <= j) {
+                SwapRows(Student_GPA, i, j);
+                i++;
+                j--;
+            }
+        } while (i < j);
+
+        if (left < j)
+            QuickSortGPA(Student_GPA, left, j);
+        if (i < right)
+            QuickSortGPA(Student_GPA, i, right);
+    }
+
+    string CalculateGPA(string uName) {
+        string filePath = FILE_PATH + "User/Student/" + uName + ".txt";
+        ifstream inFile(filePath);
+        if (inFile.is_open()) {
+            string *highScoreSubj = new string[CHAP_COUNT];
+            int *highScoreChap = new int[CHAP_COUNT];
+            double *highScore = new double[CHAP_COUNT]{0};
+
+            string line;
+            getline(inFile, line); // skip dòng password
+            int HIndex = 0;
+            while (getline(inFile, line)) {
+                if (!line.empty()) {
+                    getline(inFile, line);
+                    // skip dòng có các cột subject, subject, .....
+                    getline(inFile, line);
+                    istringstream iss(line);
+                    string subject;
+                    int chapter;
+                    double score;
+                    iss >> subject >> chapter >> score;
+                    if (HIndex == 0) {
+                        highScoreSubj[HIndex] = subject;
+                        highScoreChap[HIndex] = chapter;
+                        highScore[HIndex] = score;
+                        HIndex += 1;
+                    }
+
+                    else if (HIndex > 0) {
+                        if (highScoreSubj[HIndex - 1] != subject || highScoreChap[HIndex - 1] != chapter) {
+                            highScoreSubj[HIndex] = subject;
+                            highScoreChap[HIndex] = chapter;
+                            highScore[HIndex] = score;
+                            HIndex += 1;
+                        }
+                        else {
+                            highScore[HIndex] = max(highScore[HIndex], score);
+                        }
+                    }
+                }
+            }
+
+            double SumS = 0;
+            for (int i = 0; i < CHAP_COUNT; i++) {
+                SumS += highScore[i];
+            }
+
+            return to_string(SumS / CHAP_COUNT);
+        }
+        else {
+            return "ERROR: COULDN'T OPEN FILE";
+        }
+    };
 };
