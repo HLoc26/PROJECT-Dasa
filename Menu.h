@@ -64,6 +64,12 @@ struct StudentScore {
         this->score = score;
     }
 };
+
+/*
+    - Cac ham Print... la de in cac options
+    - Cac ham Menu la de chay logic chon option
+ */
+
 /*
     StartMenu
     StudentMenu
@@ -196,7 +202,7 @@ struct Menu {
                     break;
                 case Option2:
                     cout << "\nAdd chapter\n";
-                    // XemDiem();
+                    AddChapter();
                     break;
                 case Option3:
                     ChangePass(ERole::Teacher);
@@ -1174,7 +1180,7 @@ struct Menu {
         system("cls");
         cout << "STUDENT'S HIGHSCORE" << endl;
         cout << "================================\n";
-        ifstream list(FILE_PATH + "User/Teacher/StudentList.txt", ios::in);
+        ifstream list(FILE_PATH + "User/Teacher/StudentList.txt", ios::app);
 
         string *SList = new string[1000];
         string uName;
@@ -1183,153 +1189,81 @@ struct Menu {
             SList[size] = uName;
             size += 1;
         }
+
         list.close();
-
-        cout << "\nSORT:\n\t1. Ascending by Username\n\t2. Ascending by GPA\n\n";
-
         for (int i = 0; i < size; i++) {
             string name = SList[i];
             PrintHighestScores(name, true);
         }
-        cout << "Press ENTER to go back\n";
-
-        double* averageScores = new double[size];
-        for (int i = 0; i < size; i++) {
-            string studentName = SList[i];
-            double totalScore = 0.0;
-            int count = 0;
-        }
-
-        PrintSortedScore(SList, size);
-
-        int ex = _getch();
-        switch (ex) {
-        case 49:
-            QuickSortName(SList, 0, size - 1);
-            //PrintSortedScore(SList, 0, size - 1);
-            break;
-        case 50:
-            /* Sort by GPA */
-            break;
-        case 13:
-            return;
-        default:
-            break;
-        }
+        cout << "Press any button to go back\n";
+        _getch();
     }
 
-    void QuickSortedScore(double* averageScores, string name[], int left, int right) {
-        int i, j;
-        string x;
-        double avgScore;
-        x = name[(left + right) / 2];
-        /*
-        double* averageScores = new double[CHAP_COUNT] {0};
-
-        for (int k = 0; k < CHAP_COUNT; k++) {
-            averageScores[k] = CalculateAverageScore(uName, name);
-        }
-        */
-        avgScore = averageScores[(left + right) / 2];
-        i = left;
-        j = right;
+    void AddChapter() {
+        int ex;
         do {
-            while (averageScores[i] < avgScore)
-                i++;
-            while (averageScores[j] > avgScore)
-                j--;
-            if (i <= j) {
-                swap(name[i], name[j]);
-                swap(averageScores[i], averageScores[j]);
-                i++;
-                j--;
-            }
-        } while (i <= j);
-        if (left < j) QuickSortedScore(averageScores, name, left, j);
-        if (i < right) QuickSortedScore(averageScores, name, i, right);
-    }
+            system("cls");
+            cout << "===== ADD QUESTION TO BANK =====\n";
 
+            string subject;
+            int chapter;
+            string difficulty;
+            string filePath;
 
-    void PrintSortedScore(string SList[], int size) {
+            cout << "Enter subject (English, Chemistry, Math, ...): ";
+            getline(cin, subject);
 
-        double* averageScores = new double[size];
-        for (int i = 0; i < size; i++) {
-            averageScores[i] = CalculateAverageScore(SList[i]);
-        }
-        QuickSortedScore(averageScores, SList, 0, size - 1);
+            cout << "Enter chapter number: ";
+            cin >> chapter;
 
-        cout << "\nSorted Scores (Ascending Order)\n";
-        cout << "================================\n";
-        cout << setw(15) << left << "Username" << setw(15) << "Average Score" << endl;  
+            cout << "Enter difficulty (Easy, Medium, Hard): ";
+            cin.ignore();
+            getline(cin, difficulty);
 
-        for (int i = 0; i < size; i++) {
-            cout << setw(15) << left << SList[i] << setw(15) << averageScores[i] << endl;
-        }
-        cout << "================================\n";
-    }
+            cout << "Enter file path of the question: ";
+            getline(cin, filePath);
 
-    double CalculateAverageScore(string uName) {
-        string filePath = FILE_PATH + "User/Student/" + uName + ".txt";
-        ifstream inFile(filePath);
+            AddQuestionToBank(subject, chapter, difficulty, filePath);
 
-        if (inFile.is_open()) {
-            double* highScore = new double[CHAP_COUNT] {0};
+            cout << "Do you want to add another chapter? (Press ESC to stop, any other key to continue): ";
+            ex = _getch();
 
-            string line;
-            getline(inFile, line);
-            int HIndex = 0;
-            //ERROR
-            while (getline(inFile, line)) {
-                if (!line.empty()) {
-                    getline(inFile, line);
-                    istringstream iss(line);
-                    string subject;
-                    int chapter;
-                    double score = 0;
-                    iss >> subject >> chapter >> score;
-                    if (HIndex == 0) {
-                        highScore[HIndex] = score;
-                        HIndex += 1;
-                    }
+        } while (ex != KEY_ESC);
 
-                    else if (HIndex > 0) {
-                            highScore[HIndex] = score;
-                            HIndex += 1;
-                    }
-                    else {
-                            highScore[HIndex] = max(highScore[HIndex], score);
-                    }
-                }
-            }
-
-            double totalScore = 0;
-            for (int i = 0; i < HIndex; i++) {
-                totalScore += highScore[i];
-            }
-            double averageScore = totalScore / HIndex;
-            //cout << uName << " " << averageScore << endl;
-            return averageScore;
+        system("cls");
+        cout << "Return to the main menu? (Y/N): ";
+        char o;
+        cin >> o;
+        if (tolower(o) == 'n') {
+            exit(0);
         }
     }
 
-    void QuickSortName(string name[], int left, int right) {
-        int i, j;
-        string x;
-        x = name[(left + right) / 2];
-        i = left;
-        j = right;
-        do {
-            while (name[i] < x)
-                i++;
-            while (name[j] > x)
-                j--;
-            if (i <= j) {
-                swap(name[i], name[j]);
-                i++;
-                j--;
-            }
-        } while (i < j);
-        if (left < j) QuickSortName(name, left, j);
-        if (i < right) QuickSortName(name, i, right);
+    void AddQuestionToBank(string& subject, int chapter, string& difficulty, string& filePath) {
+        //Đường dẫn tới thư mục của môn học
+        string subjectPath = BANK_PATH + subject + "/";
+        //Đường dẫn tới thư mục của chương
+        string chapterPath = subjectPath + "Chapter_" + to_string(chapter) + "/";
+
+        //Tạo thư mục nếu nó chưa tồn tại
+        filesystem::create_directories(chapterPath);
+
+        //Đường dẫn tới file mới
+        string newFilePath = chapterPath + difficulty + ".txt";
+
+        //Sao chép nội dung từ file nguồn sang file trong ngân hàng
+        ifstream sourceFile(filePath, ios::binary);
+        ofstream newFile(newFilePath, ios::binary);
+
+        if (sourceFile.is_open() && newFile.is_open()) {
+            newFile << sourceFile.rdbuf();
+            cout << "Add Chapter_" + to_string(chapter) + " successfully\n";
+        }
+        else {
+            cerr << "Error transfering the question file to Question Bank.\n";
+        }
+
+        sourceFile.close();
+        newFile.close();
     }
 };

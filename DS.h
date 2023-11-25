@@ -5,6 +5,12 @@
 #include <fstream>
 #include <iostream>
 #include <string>
+#include <random>
+#include <algorithm>
+
+//#define FILE_PATH string("")
+#define FILE_PATH string("C:/DASA/TEST PROJECT/ConsoleApplication1/")
+#define BANK_PATH string("C:/DASA/TEST PROJECT/ConsoleApplication1/NganHang/")
 
 using namespace std;
 
@@ -39,9 +45,9 @@ struct DanhSach {
             chapter = "Chapter_3";
         }
 
-        string file_de = "C:/DASA/TEST PROJECT/ConsoleApplication1/NganHang/" + monhoc + "/" + chapter + "/CHDe.txt";
-        string file_tb = "C:/DASA/TEST PROJECT/ConsoleApplication1/NganHang/" + monhoc + "/" + chapter + "/CHTB.txt";
-        string file_kho = "C:/DASA/TEST PROJECT/ConsoleApplication1/NganHang/" + monhoc + "/" + chapter + "/CHKho.txt";
+        string file_de = FILE_PATH + "NganHang/" + monhoc + "/" + chapter + "/CHDe.txt";
+        string file_tb = FILE_PATH + "NganHang/" + monhoc + "/" + chapter + "/CHTB.txt";
+        string file_kho = FILE_PATH + "NganHang/" + monhoc + "/" + chapter + "/CHKho.txt";
         ifstream de(file_de, ios::in);
         ifstream tb(file_tb, ios::in);
         ifstream kho(file_kho, ios::in);
@@ -97,6 +103,10 @@ struct DanhSach {
             i += 1;
         }
         slch_kho = i;
+
+        de.close();
+        tb.close();
+        kho.close();
     }
 
     void InDSCauHoi() {
@@ -121,7 +131,6 @@ struct DanhSach {
         cout << "\t\tDe:         " << slch_de << endl;
         cout << "\t\tTrung binh: " << slch_tb << endl;
         cout << "\t\tKho:        " << slch_kho << endl;
-
 
         DLList Questions;
         // Tạo đề thi với câu hỏi ngẫu nhiên
@@ -201,7 +210,9 @@ struct DanhSach {
         }
 
         srand(time(0));
-        random_shuffle(begin(phuongan), end(phuongan)); // #include <algorithm>
+        random_device rd;
+        mt19937 g(rd());
+        shuffle(begin(phuongan), end(phuongan), g);
 
         ch.a = phuongan[0];
         ch.b = phuongan[1];
