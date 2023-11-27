@@ -14,5 +14,5 @@ int main() {
     /*Menu menu;
     menu.PrintStudentsScore(); */
     Menu menu;
-    menu.StartMenu();
+    menu.StudentMenu();
 }
