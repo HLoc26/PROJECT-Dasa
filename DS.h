@@ -4,6 +4,7 @@
 #include <cstdlib>
 #include <fstream>
 #include <iostream>
+#include <random>
 #include <string>
 
 #define FILE_PATH string("")
@@ -206,8 +207,9 @@ struct DanhSach {
             DA = ch.d;
         }
 
-        srand(time(0));
-        random_shuffle(begin(phuongan), end(phuongan)); // #include <algorithm>
+        random_device rd;
+        mt19937 g(rd());
+        shuffle(begin(phuongan), end(phuongan), g);
 
         ch.a = phuongan[0];
         ch.b = phuongan[1];
