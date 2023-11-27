@@ -9,6 +9,7 @@
 #include <fstream>
 #include <iomanip>
 #include <iostream>
+#include <string.h>
 #include <thread>
 
 #define KEY_UP 72
@@ -85,7 +86,7 @@ struct Menu {
     string username = "";
     string password = "";
     // Số lượng phần tử trong mảng lưu highscore trong hàm PrintHighScore
-    int CHAP_COUNT = 4;
+    int CHAP_COUNT = 8;
 
     void StartMenu() {
         int option = 20000;
@@ -251,7 +252,7 @@ struct Menu {
             }
             else if (ex == KEY_ESC) {
                 system("cls");
-                Exit();
+                StudentMenu();
             }
         }
     }
@@ -344,7 +345,7 @@ struct Menu {
             }
             else if (ex == KEY_ESC) {
                 system("cls");
-                Exit();
+                SelectSubject();
             }
         }
     }
@@ -1035,11 +1036,13 @@ struct Menu {
 
     void PrintHighestScores(string uName, bool FromTeacher = false) {
         string filePath = FILE_PATH + "User/Student/" + uName + ".txt";
+        cout << filePath << endl;
         ifstream inFile(filePath);
         if (inFile.is_open()) {
-            string *highScoreSubj = new string[CHAP_COUNT];
-            int *highScoreChap = new int[CHAP_COUNT];
-            double *highScore = new double[CHAP_COUNT]{0};
+            string highScoreSubj[CHAP_COUNT];
+            int highScoreChap[CHAP_COUNT];
+            double highScore[CHAP_COUNT];
+            memset(highScore, 0, sizeof(highScore));
 
             string line;
             getline(inFile, line); // skip dòng password
