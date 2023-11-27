@@ -266,8 +266,8 @@ struct Menu {
                     count++;
                 }
             }
-        } catch (const std::filesystem::filesystem_error &ex) {
-            std::cerr << "Error accessing the directory: " << ex.what() << std::endl;
+        } catch (const filesystem::filesystem_error &ex) {
+            cerr << "Error accessing the directory: " << ex.what() << endl;
             return -1;
         }
         return count;
@@ -1383,8 +1383,29 @@ struct Menu {
     }
 
     string Capitalize(string s) {
-        s[0] = toupper(s[0]);
-        return s;
+        {
+            istringstream iss(s);
+            ostringstream oss;
+
+            string word;
+            bool isFirstWord = true;
+
+            while (iss >> word) {
+                if (!isFirstWord) {
+                    oss << ' ';
+                }
+                else {
+                    isFirstWord = false;
+                }
+
+                if (!word.empty()) {
+                    word[0] = toupper(word[0]);
+                    oss << word;
+                }
+            }
+
+            return oss.str();
+        }
     }
 
     bool AddQuestionToBank(string subject, int chapter, string difficulty, string filePath) {
