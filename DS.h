@@ -8,7 +8,10 @@
 #include <string>
 
 #define FILE_PATH string("")
-// #define FILE_PATH string("C:/DASA/")
+#define BANK_PATH string("NganHang/")
+// #define BANK_PATH string("C:/DASA/TEST PROJECT/ConsoleApplication1/NganHang/")
+
+// #define FILE_PATH string("C:/DASA/TEST PROJECT/ConsoleApplication1/")
 
 using namespace std;
 
@@ -32,75 +35,57 @@ struct DanhSach {
     }
 
     void DocFile(string monhoc, int chap) {
-        string chapter = "";
-        if (chap == 1) {
-            chapter = "Chapter_1";
-        }
-        else if (chap == 2) {
-            chapter = "Chapter_2";
-        }
-        else if (chap == 3) {
-            chapter = "Chapter_3";
-        }
+        string chapter = "Chapter_" + to_string(chap + 1);
 
         string file_de = FILE_PATH + "NganHang/" + monhoc + "/" + chapter + "/CHDe.txt";
         string file_tb = FILE_PATH + "NganHang/" + monhoc + "/" + chapter + "/CHTB.txt";
         string file_kho = FILE_PATH + "NganHang/" + monhoc + "/" + chapter + "/CHKho.txt";
+
         ifstream de(file_de, ios::in);
         ifstream tb(file_tb, ios::in);
         ifstream kho(file_kho, ios::in);
 
-        if (de.fail()) {
-            cerr << "DS.h: ERROR Readfile: CHDe.txt\n";
-            cout << file_de << endl;
-            exit(0);
+        if (!de.fail()) {
+            int i = 0;
+            while (!de.eof()) {
+                getline(de, this->CauHoiDe[i].noidung);
+                getline(de, this->CauHoiDe[i].a);
+                getline(de, this->CauHoiDe[i].b);
+                getline(de, this->CauHoiDe[i].c);
+                getline(de, this->CauHoiDe[i].d);
+                getline(de, this->CauHoiDe[i].dapan);
+                i += 1;
+            }
+            slch_de = i;
         }
 
-        if (tb.fail()) {
-            cerr << "DS.h: ERROR Readfile: CHTb.txt\n";
-            cout << file_tb << endl;
-            exit(0);
+        if (!tb.fail()) {
+            int i = 0;
+            while (!tb.eof()) {
+                getline(tb, this->CauHoiTB[i].noidung);
+                getline(tb, this->CauHoiTB[i].a);
+                getline(tb, this->CauHoiTB[i].b);
+                getline(tb, this->CauHoiTB[i].c);
+                getline(tb, this->CauHoiTB[i].d);
+                getline(tb, this->CauHoiTB[i].dapan);
+                i += 1;
+            }
+            slch_tb = i;
         }
 
-        if (kho.fail()) {
-            cerr << "DS.h: ERROR Readfile: CHKho.txt\n";
-            cout << file_kho << endl;
-            exit(0);
+        if (!kho.fail()) {
+            int i = 0;
+            while (!kho.eof()) {
+                getline(kho, this->CauHoiKho[i].noidung);
+                getline(kho, this->CauHoiKho[i].a);
+                getline(kho, this->CauHoiKho[i].b);
+                getline(kho, this->CauHoiKho[i].c);
+                getline(kho, this->CauHoiKho[i].d);
+                getline(kho, this->CauHoiKho[i].dapan);
+                i += 1;
+            }
+            slch_kho = i;
         }
-
-        int i = 0;
-        while (!de.eof()) {
-            getline(de, this->CauHoiDe[i].noidung);
-            getline(de, this->CauHoiDe[i].a);
-            getline(de, this->CauHoiDe[i].b);
-            getline(de, this->CauHoiDe[i].c);
-            getline(de, this->CauHoiDe[i].d);
-            getline(de, this->CauHoiDe[i].dapan);
-            i += 1;
-        }
-        slch_de = i;
-        i = 0;
-        while (!tb.eof()) {
-            getline(tb, this->CauHoiTB[i].noidung);
-            getline(tb, this->CauHoiTB[i].a);
-            getline(tb, this->CauHoiTB[i].b);
-            getline(tb, this->CauHoiTB[i].c);
-            getline(tb, this->CauHoiTB[i].d);
-            getline(tb, this->CauHoiTB[i].dapan);
-            i += 1;
-        }
-        slch_tb = i;
-        i = 0;
-        while (!kho.eof()) {
-            getline(kho, this->CauHoiKho[i].noidung);
-            getline(kho, this->CauHoiKho[i].a);
-            getline(kho, this->CauHoiKho[i].b);
-            getline(kho, this->CauHoiKho[i].c);
-            getline(kho, this->CauHoiKho[i].d);
-            getline(kho, this->CauHoiKho[i].dapan);
-            i += 1;
-        }
-        slch_kho = i;
 
         de.close();
         tb.close();
@@ -108,19 +93,24 @@ struct DanhSach {
     }
 
     void InDSCauHoi() {
-        cout << "\n=== DS Cau hoi de ===\n";
-        for (int i = 0; i < slch_de; i++) {
-            cout << i + 1 << ". " << CauHoiDe[i].noidung << endl;
+        if (slch_de != 0) {
+            cout << "\n=== DS Cau hoi de ===\n";
+            for (int i = 0; i < slch_de; i++) {
+                cout << i + 1 << ". " << CauHoiDe[i].noidung << endl;
+            }
         }
 
-        cout << "\n=== DS Cau hoi trung binh ===\n";
-        for (int i = 0; i < slch_tb; i++) {
-            cout << i + 1 << ". " << CauHoiTB[i].noidung << endl;
+        if (slch_tb != 0) {
+            cout << "\n=== DS Cau hoi trung binh ===\n";
+            for (int i = 0; i < slch_tb; i++) {
+                cout << i + 1 << ". " << CauHoiTB[i].noidung << endl;
+            }
         }
-
-        cout << "\n=== DS Cau hoi kho ===\n";
-        for (int i = 0; i < slch_kho; i++) {
-            cout << i + 1 << ". " << CauHoiKho[i].noidung << endl;
+        if (slch_kho != 0) {
+            cout << "\n=== DS Cau hoi kho ===\n";
+            for (int i = 0; i < slch_kho; i++) {
+                cout << i + 1 << ". " << CauHoiKho[i].noidung << endl;
+            }
         }
     }
     DLList GetQuestions() {

@@ -9,6 +9,7 @@
 #include <fstream>
 #include <iomanip>
 #include <iostream>
+#include <string.h>
 #include <thread>
 
 #define KEY_UP 72
@@ -23,9 +24,6 @@
 #define COLOR_BLUE "\x1B[36m"
 #define COLOR_GREEN "\x1B[32m"
 #define COLOR_END "\033[0m"
-
-// Số lượng phần tử trong mảng lưu highscore trong hàm PrintHighScore
-#define CHAP_COUNT 9 // để đó để test
 
 using namespace std;
 
@@ -46,12 +44,6 @@ enum EMenu {
     TeacherM,
     StudentM,
     SubjectM
-};
-
-enum ESubject {
-    Math,
-    Chemistry,
-    English
 };
 
 struct StudentScore {
@@ -93,6 +85,8 @@ struct Menu {
 
     string username = "";
     string password = "";
+    // Số lượng phần tử trong mảng lưu highscore trong hàm PrintHighScore
+    int CHAP_COUNT = 8;
 
     void StartMenu() {
         int option = 20000;
@@ -202,7 +196,8 @@ struct Menu {
                     break;
                 case Option2:
                     cout << "\nAdd chapter\n";
-                    // XemDiem();
+                    AddChapter();
+
                     break;
                 case Option3:
                     ChangePass(ERole::Teacher);
@@ -235,7 +230,9 @@ struct Menu {
     }
     // Chọn môn học
     void SelectSubject() {
-        int option = 20000;
+        string subjectList[100];
+        int size = ReadSubDir(subjectList, BANK_PATH);
+        int option = 1000 * size;
         while (true) {
             system("cls");
             cout << "Hello, " << username << endl;
@@ -245,21 +242,7 @@ struct Menu {
             int ex = _getch();
 
             if (ex == KEY_ENTER) {
-                switch (option % 4) {
-                case Option1:
-                    SelectChapter(ESubject::Math);
-                    break;
-                case Option2:
-                    SelectChapter(ESubject::English);
-                    break;
-                case Option3:
-                    SelectChapter(ESubject::Chemistry);
-                    break;
-                case Option4:
-                    return;
-                default:
-                    break;
-                }
+                SelectChapter(subjectList[option % size]);
             }
             else if (ex == KEY_UP) {
                 option -= 1;
@@ -269,18 +252,37 @@ struct Menu {
             }
             else if (ex == KEY_ESC) {
                 system("cls");
-                Exit();
+                StudentMenu();
             }
         }
     }
+
+    int ReadSubDir(string temp[100], string path) {
+
+        int count = 0;
+        try {
+            for (const auto &entry : filesystem::directory_iterator(path)) {
+                if (filesystem::is_directory(entry.path()) && count < 100) {
+                    temp[count] = entry.path().filename().string();
+                    count++;
+                }
+            }
+        } catch (const filesystem::filesystem_error &ex) {
+            cerr << "Error accessing the directory: " << ex.what() << endl;
+            return -1;
+        }
+        return count;
+    }
+
     void PrintMenu(EMenu type, int option) {
-        string options[4];
+        string options[100];
         int size;
         if (type == EMenu::MainM) {
             string temp[] = {"Student Login",
                              "Student Register",
                              "Teacher Login",
                              "Exit"};
+            size = 4;
             copy(begin(temp), end(temp), begin(options));
         }
         else if (type == EMenu::TeacherM) {
@@ -288,6 +290,7 @@ struct Menu {
                              "Add Questions",
                              "Change Password",
                              "Log out"};
+            size = 4;
             copy(begin(temp), end(temp), begin(options));
         }
         else if (type == EMenu::StudentM) {
@@ -295,17 +298,17 @@ struct Menu {
                              "See Scores",
                              "Change Password",
                              "Log out"};
+            size = 4;
             copy(begin(temp), end(temp), begin(options));
         }
         else if (type == EMenu::SubjectM) {
-            string temp[] = {"Math",
-                             "English",
-                             "Chemistry",
-                             "Return"};
+
+            string temp[100];
+            size = ReadSubDir(temp, BANK_PATH);
             copy(begin(temp), end(temp), begin(options));
         }
-        for (int i = 0; i < 4; i++) {
-            if (i == option % 4) {
+        for (int i = 0; i < size; i++) {
+            if (i == option % size) {
                 cout << COLOR_BLUE << "\t> " << options[i] << " <" << COLOR_END << "\n";
             }
             else {
@@ -314,35 +317,25 @@ struct Menu {
         }
     }
     // Man hinh chon Chapter
-    void SelectChapter(ESubject monhoc) {
-        int option = 20000;
+    void SelectChapter(string monhoc) {
+        string chapList[100];
+
+        int count = ReadSubDir(chapList, BANK_PATH + "/" + monhoc);
+
+        cout << "Chap1: " << chapList[0] << endl;
+
+        int option = count * 1000;
         while (true) {
             system("cls");
             cout << "Hello, " << username << endl;
             cout << "===============================\n";
             cout << "=========SELECT CHAPTER========\n";
-            PrintMenu(monhoc, option);
+            PrintMenu(monhoc, chapList, count, option);
             int ex = _getch();
 
             if (ex == KEY_ENTER) {
-                switch (option % 4) {
-                case Option1:
-                    cout << "SUBJECT: " << monhoc << "\tCHAPTER " << option % 4 + 1;
-                    StartTest(monhoc, 1);
-                    break;
-                case Option2:
-                    cout << "SUBJECT: " << monhoc << "\tCHAPTER " << option % 4 + 1;
-                    StartTest(monhoc, 2);
-                    break;
-                case Option3:
-                    cout << "SUBJECT: " << monhoc << "\tCHAPTER " << option % 4 + 1;
-                    StartTest(monhoc, 3);
-                    break;
-                case Option4:
-                    return;
-                default:
-                    break;
-                }
+                cout << "SUBJECT: " << monhoc << "\tCHAPTER " << option % count + 1;
+                StartTest(monhoc, option % count);
             }
             else if (ex == KEY_UP) {
                 option -= 1;
@@ -352,56 +345,21 @@ struct Menu {
             }
             else if (ex == KEY_ESC) {
                 system("cls");
-                Exit();
+                SelectSubject();
             }
         }
     }
-    void PrintMenu(ESubject monhoc, int option) {
-        string mon;
-        switch (monhoc) {
-        case ESubject::Math:
-            mon = "Math";
-            break;
-        case ESubject::English:
-            mon = "English";
-            break;
-        case ESubject::Chemistry:
-            mon = "Chemistry";
-            break;
+    void PrintMenu(string monhoc, string chapList[], int listSize, int option) {
 
-        default:
-            break;
-        }
         cout << endl
-             << mon << endl;
-        string options[4];
-        if (monhoc == ESubject::Math) {
-            string temp[] = {"Chapter 1: Decimal Number",
-                             "Chapter 2: Math2",
-                             "Chapter 3: Math3",
-                             "Return"};
-            copy(begin(temp), end(temp), begin(options));
-        }
-        else if (monhoc == ESubject::English) {
-            string temp[] = {"Chapter 1: E1",
-                             "Chapter 2: E2",
-                             "Chapter 3: E3",
-                             "Return"};
-            copy(begin(temp), end(temp), begin(options));
-        }
-        else if (monhoc == ESubject::Chemistry) {
-            string temp[] = {"Chapter 1: Oxygen",
-                             "Chapter 2: Bases",
-                             "Chapter 3: Acids",
-                             "Return"};
-            copy(begin(temp), end(temp), begin(options));
-        }
-        for (int i = 0; i < 4; i++) {
-            if (i == option % 4) {
-                cout << COLOR_BLUE << "\t> " << options[i] << " <" << COLOR_END << "\n";
+             << monhoc << endl;
+
+        for (int i = 0; i < listSize; i++) {
+            if (i == option % listSize) {
+                cout << COLOR_BLUE << "\t> " << chapList[i] << " <" << COLOR_END << "\n";
             }
             else {
-                cout << "\t" << options[i] << "\n";
+                cout << "\t" << chapList[i] << "\n";
             }
         }
     }
@@ -526,20 +484,6 @@ struct Menu {
             }
         }
     }
-    // Hiệu ứng cho chữ logging in
-    void LogInAnimate() {
-        srand(time(NULL));
-        int time = rand() % (rand() % 10 + 8) + 4;
-        for (int i = 0; i < time; i++) {
-            system("cls");
-            cout << COLOR_GREEN
-                 << "Succeed!"
-                 << COLOR_END << "\n";
-            cout << "Logging in" << string((i + 1) % 4, '.');
-            this_thread::sleep_for(chrono::seconds(1));
-        }
-        system("cls");
-    }
     // Kiểm tra xem TK và MK có hợp lệ không
     bool CheckValidLogin(string userInp, string passInp, ERole role) {
         string folder = "";
@@ -573,30 +517,17 @@ struct Menu {
             return false;
         }
     }
-    void StartTest(ESubject monhoc, int chapter) {
-        string mon;
-        switch (monhoc) {
-        case ESubject::Math:
-            mon = "Toan";
-            break;
-        case ESubject::English:
-            mon = "TiengAnh";
-            break;
-        case ESubject::Chemistry:
-            mon = "Hoa";
-            break;
-
-        default:
-            break;
-        }
+    void StartTest(string monhoc, int chapter) {
 
         DanhSach DSCH;
         srand(time(NULL));
-        DSCH.DocFile(mon, chapter);
+
+        DSCH.DocFile(monhoc, chapter);
         DLList Question = DSCH.GetQuestions();
         // Question.PrintList();
+
         system("cls");
-        Test(Question, mon, chapter);
+        Test(Question, monhoc, chapter);
     }
 
     // Bat dau lam bai test
@@ -607,6 +538,7 @@ struct Menu {
         int choices = 20000;
         double totalScore = 0;
         int correctAnswers = 0;
+
         bool *answeredCorrectly = new bool[Question.size]{false};
 
         while (true) {
@@ -1104,11 +1036,13 @@ struct Menu {
 
     void PrintHighestScores(string uName, bool FromTeacher = false) {
         string filePath = FILE_PATH + "User/Student/" + uName + ".txt";
+        cout << filePath << endl;
         ifstream inFile(filePath);
         if (inFile.is_open()) {
-            string *highScoreSubj = new string[CHAP_COUNT];
-            int *highScoreChap = new int[CHAP_COUNT];
-            double *highScore = new double[CHAP_COUNT]{0};
+            string highScoreSubj[CHAP_COUNT];
+            int highScoreChap[CHAP_COUNT];
+            double highScore[CHAP_COUNT];
+            memset(highScore, 0, sizeof(highScore));
 
             string line;
             getline(inFile, line); // skip dòng password
@@ -1157,6 +1091,7 @@ struct Menu {
                 for (int i = 0; i < HIndex; i++) {
                     cout << setw(12) << left << highScoreSubj[i] << setw(10) << left << highScoreChap[i] << setw(10) << left << highScore[i] << endl;
                 }
+
                 cout << CalculateGPA(uName) << endl;
                 cout << "================================\n\n";
             }
@@ -1192,6 +1127,7 @@ struct Menu {
             string name = SList[i];
             PrintHighestScores(name, true);
         }
+
         cout << "Press ENTER to go back\n";
 
         int ex = _getch();
@@ -1386,4 +1322,128 @@ struct Menu {
             return "ERROR: COULDN'T OPEN FILE";
         }
     };
+    void AddChapter() {
+        int ex;
+        do {
+            bool addOK = false;
+            do {
+                system("cls");
+                cout << "===== ADD QUESTION TO BANK =====\n";
+
+                string subject;
+                int chapter;
+                string difficulty;
+                string filePath;
+
+                cout << "Enter subject (English, Chemistry, Math, ...): ";
+                if (cin.peek() == '\n') {
+                    cin.ignore();
+                }
+                getline(cin, subject);
+
+                cout << "Enter chapter number: ";
+                cin >> chapter;
+
+                cout << "Enter difficulty (Easy, Medium, Hard):\n";
+                cout << "\t1. Easy\n";
+                cout << "\t2. Medium\n";
+                cout << "\t3. Hard\n";
+                int diff_opt;
+
+                cin >> diff_opt;
+                switch (diff_opt) {
+                case 1:
+                    difficulty = "CHDe";
+                    break;
+                case 2:
+                    difficulty = "CHTB";
+                    break;
+                case 3:
+                    difficulty = "CHKho";
+                    break;
+                default:
+                    break;
+                }
+
+                cout << "Enter file path of the question: ";
+                cin.ignore();
+                getline(cin, filePath);
+
+                addOK = AddQuestionToBank(subject, chapter, difficulty, filePath);
+            } while (!addOK);
+            cout << "Do you want to add another chapter? (Press ESC to stop, any other key to continue): ";
+            ex = _getch();
+
+        } while (ex != KEY_ESC);
+
+        system("cls");
+        cout << "Return to the main menu? (Y/N): ";
+        char o;
+        cin >> o;
+        if (tolower(o) == 'n') {
+            exit(0);
+        }
+    }
+
+    string Capitalize(string s) {
+        {
+            istringstream iss(s);
+            ostringstream oss;
+
+            string word;
+            bool isFirstWord = true;
+
+            while (iss >> word) {
+                if (!isFirstWord) {
+                    oss << ' ';
+                }
+                else {
+                    isFirstWord = false;
+                }
+
+                if (!word.empty()) {
+                    word[0] = toupper(word[0]);
+                    oss << word;
+                }
+            }
+
+            return oss.str();
+        }
+    }
+
+    bool AddQuestionToBank(string subject, int chapter, string difficulty, string filePath) {
+        cout << Capitalize(subject) << endl;
+        // Đường dẫn tới thư mục của môn học
+        string subjectPath = BANK_PATH + Capitalize(subject) + "/";
+        // Đường dẫn tới thư mục của chương
+        string chapterPath = subjectPath + "Chapter_" + to_string(chapter) + "/";
+
+        // Tạo thư mục nếu nó chưa tồn tại
+        filesystem::create_directories(chapterPath);
+
+        // Đường dẫn tới file mới
+        string newFilePath = chapterPath + difficulty + ".txt";
+
+        // Sao chép nội dung từ file nguồn sang file trong ngân hàng
+        ifstream sourceFile(filePath, ios::binary);
+        ofstream newFile(newFilePath, ios::binary);
+
+        if (sourceFile.is_open() && newFile.is_open()) {
+
+            newFile << sourceFile.rdbuf();
+            cout << "Add Chapter_" + to_string(chapter) + " successfully\n";
+
+            CHAP_COUNT++;
+
+            sourceFile.close();
+            newFile.close();
+            return true;
+        }
+        else {
+            cerr << "Error transfering the question file to Question Bank.\n";
+            sourceFile.close();
+            newFile.close();
+            return false;
+        }
+    }
 };
