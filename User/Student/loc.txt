@@ -16,16 +16,13 @@ Subject        Chapter        Score
 Hoa            2              6        
 2023-11-19 01:40:22
 Subject        Chapter        Score     
-Hoa            2              3       
-2023-11-27 14:24:13
-Subject        Chapter        Score     
-Hoa            0              0         
+Hoa            2              3            
 2023-11-27 14:25:16
 Subject        Chapter        Score     
-Hoa            1              10        
-2023-11-27 17:46:48
-Subject        Chapter        Score     
-Su             0              0         
+Hoa            1              10                
 2023-11-27 18:22:07
 Subject        Chapter        Score     
 Dia            1              10        
+2023-11-28 13:57:53
+Subject        Chapter        Score     
+Hoa            0              8.33333   

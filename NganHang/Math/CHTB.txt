@@ -1,0 +1,60 @@
+If 3x - 7 = 14, what is the value of x?
+7
+5
+8
+9
+C
+What is the square of 8?
+48
+64
+72
+81
+B
+Solve for y in the equation 2y + 5 = 11.
+3
+4
+6
+8
+B
+If a shirt costs $25 and is on sale for 20% off, what is the sale price?
+$15
+$20
+$22
+$30
+B
+Simplify the expression (3(2x - 4) + 5).
+6x + 7
+6x - 7
+5x + 7
+5x - 7
+A
+What is the sum of the first 10 positive integers?
+45
+50
+55
+60
+B
+Solve for x in the equation (2(x - 3) = 10).
+5
+6
+7
+8
+D
+If a + 2b = 10 and 2a - b = 4, what is the value of a?
+2
+3
+4
+5
+B
+The sum of three consecutive even integers is 54. What are the integers?
+16, 18, 20
+18, 20, 22
+20, 22, 24
+22, 24, 26
+C
+If (4^x = 64), what is the value of x?
+2
+3
+4
+5
+B
