@@ -23,7 +23,7 @@ Construct the program to create multiple choices tests for students
     + Hiện tại nút 1 và 2 là sắp xếp theo tên và GPA, có thể chỉnh lại:
         . Nút 1 là show tất cả -> sắp xếp
         . Nút 2 là bắt đầu tìm kiếm
-    + Nhớ thêm nút esc là quay lại, không phải escape
+    + Nhớ thêm nút esc là quay lại, không phải thoát hẳn chương trình.
 ### Sáng
 - [ ] Hoàn thiện file DOCX và PPT, HẠN CHẾ dùng AI
 - [ ] Chỉ chụp những hàm logic đưa lên word, những hàm Print thì mention một phần nhỏ thôi, không cần chụp code
