@@ -7,7 +7,8 @@ class Algorithm {
     void merge(CauHoi *arr, int left, int mid, int right) {
         int n1 = mid - left + 1;
         int n2 = right - mid;
-        CauHoi leftArr[n1], rightArr[n2];
+        CauHoi *leftArr = new CauHoi[n1];
+        CauHoi *rightArr = new CauHoi[n2];
 
         for (int i = 0; i < n1; i++) {
             leftArr[i] = arr[left + i];
@@ -41,6 +42,8 @@ class Algorithm {
             j++;
             k++;
         }
+        delete[] leftArr;
+        delete[] rightArr;
     }
     void SwapRows(string **Student_GPA, int i, int j) {
         swap(Student_GPA[i][0], Student_GPA[j][0]); // Swap Tên

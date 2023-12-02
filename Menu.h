@@ -12,6 +12,7 @@
 #include <iostream>
 #include <string.h>
 #include <thread>
+#include <sstream>
 
 #define KEY_UP 72
 #define KEY_DOWN 80
@@ -1068,9 +1069,9 @@ struct Menu {
         cout << filePath << endl;
         ifstream inFile(filePath);
         if (inFile.is_open()) {
-            string highScoreSubj[CHAP_COUNT];
-            int highScoreChap[CHAP_COUNT];
-            double highScore[CHAP_COUNT];
+            string *highScoreSubj = new string[CHAP_COUNT];
+            int *highScoreChap = new int[CHAP_COUNT];
+            double *highScore = new double[CHAP_COUNT];
             memset(highScore, 0, sizeof(highScore));
 
             string line;
@@ -1497,7 +1498,7 @@ struct Menu {
 
         if (file.fail()) {
             cerr << "ERROR READ TARGET FILE!\n";
-            return;
+            return NULL;
         }
 
         int i = 0;
