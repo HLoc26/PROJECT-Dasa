@@ -1,3 +1,4 @@
+#include "Algorithm.h"
 #include "CauHoi.h"
 #include "DLList.h"
 #include "DS.h"
@@ -86,7 +87,35 @@ struct Menu {
     string username = "";
     string password = "";
     // Số lượng phần tử trong mảng lưu highscore trong hàm PrintHighScore
-    int CHAP_COUNT = 8;
+    int CHAP_COUNT = InitCHAP_COUNT();
+    Algorithm Algorithm;
+
+    Menu() {
+        string username = "";
+        string password = "";
+        // Số lượng phần tử trong mảng lưu highscore trong hàm PrintHighScore
+        int CHAP_COUNT = InitCHAP_COUNT();
+    }
+
+    // Count current number of chapters at menu initialization
+    int InitCHAP_COUNT() {
+        string subjectPath = BANK_PATH;
+        string subject;
+        int countChap = 0;
+
+        // Read all subject dir and add into a subject array
+        for (const auto &entry : filesystem::directory_iterator(subjectPath)) {
+            if (filesystem::is_directory(entry.path())) {
+                subject = entry.path().filename().string();
+                for (const auto &entry2 : filesystem::directory_iterator(subjectPath + subject)) {
+                    if (filesystem::is_directory(entry2.path())) {
+                        countChap++;
+                    }
+                }
+            }
+        }
+        return countChap;
+    }
 
     void StartMenu() {
         int option = 20000;
@@ -1133,7 +1162,7 @@ struct Menu {
         int ex = _getch();
         switch (ex) {
         case 49:
-            QuickSortName(SList, 0, size - 1);
+            Algorithm.QuickSortName(SList, 0, size - 1);
             PrintSortedScore(SList, size);
             break;
         case 50:
@@ -1160,7 +1189,7 @@ struct Menu {
         int ex = _getch();
         switch (ex) {
         case 49:
-            QuickSortName(SList, 0, size - 1);
+            Algorithm.QuickSortName(SList, 0, size - 1);
             PrintSortedScore(SList, size);
             break;
         case 50:
@@ -1173,26 +1202,6 @@ struct Menu {
         }
     }
 
-    void QuickSortName(string name[], int left, int right) {
-        int i, j;
-        string x;
-        x = name[(left + right) / 2];
-        i = left;
-        j = right;
-        do {
-            while (name[i] < x)
-                i++;
-            while (name[j] > x)
-                j--;
-            if (i <= j) {
-                swap(name[i], name[j]);
-                i++;
-                j--;
-            }
-        } while (i < j);
-        if (left < j) QuickSortName(name, left, j);
-        if (i < right) QuickSortName(name, i, right);
-    }
     void SortStudentScore(string SList[], int size) {
 
         int StudentCount = size;
@@ -1212,7 +1221,7 @@ struct Menu {
             Student_GPA[i][1] = CalculateGPA(uName);
         }
 
-        QuickSortGPA(Student_GPA, 0, StudentCount - 1);
+        Algorithm.QuickSortGPA(Student_GPA, 0, StudentCount - 1);
         system("cls");
         cout << "STUDENT'S HIGHSCORE" << endl;
         cout << "================================\n";
@@ -1226,7 +1235,7 @@ struct Menu {
         int ex = _getch();
         switch (ex) {
         case 49:
-            QuickSortName(SList, 0, size - 1);
+            Algorithm.QuickSortName(SList, 0, size - 1);
             PrintSortedScore(SList, size);
             break;
         case 50:
@@ -1238,36 +1247,6 @@ struct Menu {
             break;
         }
     };
-
-    void SwapRows(string **Student_GPA, int i, int j) {
-        swap(Student_GPA[i][0], Student_GPA[j][0]); // Swap Tên
-        swap(Student_GPA[i][1], Student_GPA[j][1]); // Swap Điểm
-    }
-
-    void QuickSortGPA(string **Student_GPA, int left, int right) {
-        int i, j;
-        string x;
-        x = Student_GPA[(left + right) / 2][1]; // Chọn điểm làm điểm chốt
-
-        i = left;
-        j = right;
-        do {
-            while (stoi(Student_GPA[i][1]) > stoi(x))
-                i++;
-            while (stoi(Student_GPA[j][1]) < stoi(x))
-                j--;
-            if (i <= j) {
-                SwapRows(Student_GPA, i, j);
-                i++;
-                j--;
-            }
-        } while (i < j);
-
-        if (left < j)
-            QuickSortGPA(Student_GPA, left, j);
-        if (i < right)
-            QuickSortGPA(Student_GPA, i, right);
-    }
 
     string CalculateGPA(string uName) {
         string filePath = FILE_PATH + "User/Student/" + uName + ".txt";
@@ -1365,6 +1344,17 @@ struct Menu {
                     break;
                 }
 
+                DanhSach DSXemTruoc;
+                ifstream check(BANK_PATH + subject + "/Chapter_" + to_string(chapter));
+                if (!check.fail()) {
+                    DSXemTruoc.DocFile(subject, chapter);
+                    DSXemTruoc.InDSCauHoi();
+                    _getch();
+                }
+                else {
+                    cout << "Currently there are no question in " << subject << " chapter " << chapter << "!\n";
+                    _getch();
+                }
                 cout << "Enter file path of the question: ";
                 cin.ignore();
                 getline(cin, filePath);
@@ -1424,26 +1414,106 @@ struct Menu {
         // Đường dẫn tới file mới
         string newFilePath = chapterPath + difficulty + ".txt";
 
-        // Sao chép nội dung từ file nguồn sang file trong ngân hàng
-        ifstream sourceFile(filePath, ios::binary);
-        ofstream newFile(newFilePath, ios::binary);
-
-        if (sourceFile.is_open() && newFile.is_open()) {
-
-            newFile << sourceFile.rdbuf();
-            cout << "Add Chapter_" + to_string(chapter) + " successfully\n";
-
+        // Kiểm tra file mới có trống không, trống thì mới tăng CHAP_COUNT lên 1 đơn vị
+        ifstream targetFileIn(newFilePath);
+        targetFileIn.seekg(0, std::ios::end);
+        size_t size = targetFileIn.tellg();
+        targetFileIn.close();
+        // Nếu trống thì tăng CHAP_COUNT lên 1 và bắt đầu sao chép qua
+        if (size == 0) {
             CHAP_COUNT++;
+            // Sao chép nội dung từ file nguồn sang file trong ngân hàng
+            ifstream sourceFile(filePath);
+            ofstream targetFile(newFilePath, ios_base::app);
 
-            sourceFile.close();
-            newFile.close();
-            return true;
+            if (sourceFile.is_open() && targetFile.is_open()) {
+
+                string line;
+                while (getline(sourceFile, line)) {
+                    targetFile << line << "\n";
+                }
+
+                cout << "Add Chapter_" + to_string(chapter) + " successfully\n";
+                sourceFile.close();
+                targetFile.close();
+                return true;
+            }
+            else {
+                cerr << "Error transfering the question file to Question Bank.\n";
+                sourceFile.close();
+                targetFile.close();
+                return false;
+            }
         }
-        else {
-            cerr << "Error transfering the question file to Question Bank.\n";
-            sourceFile.close();
-            newFile.close();
-            return false;
+        // Nếu file target đã có câu hỏi, bắt đầu check các câu trùng lặp và chỉ thêm các câu ko trùng
+        /* else {
+            CauHoi *unique = uniqueQuestions()
+        } */
+    }
+
+    /*
+        Check các câu trùng lặp:
+        __ Tạo một mảng những câu hỏi sẽ thêm vào target (1)
+        __ Tạo một mảng những câu hỏi không thêm vào target (2)
+        1. Đọc file target, cho vào mảng mới, sau đó sắp xếp lại theo thứ tự tăng dần dùng merge sort
+        2. Sau đó dùng binary search tìm trên mảng
+        3. Nếu tìm thấy thì add vào mảng (2)
+        4. Những câu hỏi ko tìm thấy thì add vào mảng (1)
+        5. Thêm những câu hỏi trong mảng (1) vào file target
+     */
+
+    // Hàm trả về một mảng các câu hỏi unique
+    CauHoi *uniqueQuestions(string targetFilePath, string sourceFilePath) {
+        // Mảng chứa các câu hỏi tỏng file target
+        CauHoi *target = ReadCauHoiFromFile(targetFilePath);
+        // Mảng chứa các câu hỏi trong file sourcê
+        CauHoi *source = ReadCauHoiFromFile(sourceFilePath);
+
+        // Số phần tử trong target và source
+        int n1 = sizeof(target) / sizeof(target[0]);
+        int n2 = sizeof(source) / sizeof(source[0]);
+
+        // Sắp xếp lại target bằng merge sort để áp dùng binary search sau này
+        Algorithm.MergeSort(target, 0, n1 - 1);
+
+        // Mảng sẽ trả về
+        CauHoi *res = new CauHoi[100];
+
+        int resSize = 0;
+        // Bắt đầu tìm xem từng câu hỏi trong source có trong target hay không bằng binary search.
+        // Nếu không tìm được thì có nghĩa là trong target không có câu hỏi đó -> sẽ thêm câu hỏi đó vào target
+        for (int i = 0; i < n2; i++) {
+            if (!Algorithm.BinarySearch(target, n1, source[i])) {
+                res[resSize++] = source[i];
+            }
         }
+        return res;
+    }
+
+    // Hàm đọc câu hỏi từ file
+    CauHoi *ReadCauHoiFromFile(string path) {
+        CauHoi *arr = new CauHoi[100];
+        ifstream file(path);
+
+        if (file.fail()) {
+            cerr << "ERROR READ TARGET FILE!\n";
+            return;
+        }
+
+        int i = 0;
+        while (!file.eof()) {
+            string noidung, a, b, c, d, dapan;
+            getline(file, noidung);
+            getline(file, a);
+            getline(file, b);
+            getline(file, c);
+            getline(file, d);
+            getline(file, dapan);
+            CauHoi temp = CauHoi(noidung, a, b, c, d, dapan);
+            arr[i] = temp;
+            i++;
+        }
+        file.close();
+        return arr;
     }
 };

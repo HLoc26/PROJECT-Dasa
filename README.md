@@ -30,7 +30,7 @@ Construct the program to create multiple choices tests for students
     - Phần demo bắt đầu test đã xong, hoàn thiện phần demo trong file WORD
 
 ### Lộc
-    - Thêm show câu hỏi hiện tại có trong bank cho GV khi chọn chapter đã có câu hỏi
-    - Khi thêm câu hỏi thì áp dụng tìm kiếm để kiểm tra trùng câu hỏi (chỉ thêm các câu hỏi unique)
+    - Thêm show câu hỏi hiện tại có trong bank cho GV khi chọn chapter đã có câu hỏi_Done 1/12/2023
+    - Khi thêm câu hỏi thì áp dụng tìm kiếm để kiểm tra trùng câu hỏi (chỉ thêm các câu hỏi unique) 
     - Nếu xong sớm thì làm thêm phần hash
 

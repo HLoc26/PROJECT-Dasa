@@ -94,20 +94,23 @@ struct DanhSach {
 
     void InDSCauHoi() {
         if (slch_de != 0) {
-            cout << "\n=== DS Cau hoi de ===\n";
+            cout << "\n=== List of Easy Questions ===\n";
+            cout << "Current number of easy questions: " << slch_de << endl;
             for (int i = 0; i < slch_de; i++) {
                 cout << i + 1 << ". " << CauHoiDe[i].noidung << endl;
             }
         }
 
         if (slch_tb != 0) {
-            cout << "\n=== DS Cau hoi trung binh ===\n";
+            cout << "\n=== List of Medium Questions ===\n";
+            cout << "Current number of medium questions: " << slch_tb << endl;
             for (int i = 0; i < slch_tb; i++) {
                 cout << i + 1 << ". " << CauHoiTB[i].noidung << endl;
             }
         }
         if (slch_kho != 0) {
-            cout << "\n=== DS Cau hoi kho ===\n";
+            cout << "\n=== List of Hard Questions ===\n";
+            cout << "Current number of hard questions: " << slch_kho << endl;
             for (int i = 0; i < slch_kho; i++) {
                 cout << i + 1 << ". " << CauHoiKho[i].noidung << endl;
             }
