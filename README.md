@@ -18,7 +18,7 @@ Construct the program to create multiple choices tests for students
 
 ## Phân chia nhiệm vụ
 ### Đạt
-- [ ] Áp dụng tìm kiếm theo username khi gv xem điểm hs:
+- [dấu tích] Áp dụng tìm kiếm theo username khi gv xem điểm hs:
     + Khi bấm show điểm học sinh thì gv có thể bấm 1 nút gì đó để bắt đầu tìm kiếm
     + Hiện tại nút 1 và 2 là sắp xếp theo tên và GPA, có thể chỉnh lại:
         . Nút 1 là show tất cả -> sắp xếp
