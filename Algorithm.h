@@ -108,7 +108,32 @@ class Algorithm {
         if (i < right) QuickSortName(name, i, right);
     }
 
-    // BinarySearch dựa trên độ dài của câu hỏi
-    bool BinarySearch(CauHoi *arr1, int size, CauHoi target) {
+    // BinarySearch dựa trên độ dài của câu hỏi, không trả về vị trí mà trả về kết quả có tìm được không
+    bool BinarySearch(CauHoi *arr, int size, CauHoi target) {
+        int low = 0;
+        int high  = sizeof(arr) / sizeof(arr[0]) - 1;
+
+        while (low <= high) {
+            int mid = low + (high - low) / 2;
+
+            // Check if the target is present at the middle
+            if (arr[mid].noidung.length() == target.noidung.length()) {
+                if (arr[mid] == target) {
+                    return true;
+                }
+            }
+
+            // If the target is greater, ignore the left half
+            if (arr[mid].noidung.length() < target.noidung.length()) {
+                low = mid + 1;
+            }
+            // If the target is smaller, ignore the right half
+            else {
+                high = mid - 1;
+            }
+        }
+
+        // If the target is not present in the array
+        return false;
     }
 };

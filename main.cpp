@@ -9,5 +9,4 @@ using namespace std;
 int main() {
     Menu menu = Menu();
     menu.StartMenu();
-    // Test thui eheheh
 }

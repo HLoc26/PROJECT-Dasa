@@ -119,5 +119,10 @@ struct CauHoi {
         }
         return false;
     }
+       
+    bool operator==(const CauHoi ch) {
+        return this->noidung == ch.noidung;
+    }
+
 };
 typedef struct CauHoi CauHoi;
