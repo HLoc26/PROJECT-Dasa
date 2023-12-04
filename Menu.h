@@ -816,7 +816,7 @@ struct Menu {
 		cout << "Press any button to return\n";
 		user.close();
 
-		ofstream teacher(FILE_PATH + "User/Teacher/StudentList.txt", ios::out);
+		ofstream teacher(FILE_PATH + "User/Teacher/StudentList.txt", ios::app);
 		teacher << userInp << endl;
 		teacher.close();
 		_getch();
@@ -1112,6 +1112,8 @@ struct Menu {
 		}
 	}
 
+	//Thêm case 51 vào 3 hàm này
+
 	void PrintStudentsScore() {
 		system("cls");
 		cout << "STUDENT'S HIGHSCORE" << endl;
@@ -1127,7 +1129,8 @@ struct Menu {
 		}
 		list.close();
 
-		cout << "\nSORT:\n\t1. Ascending by Username\n\t2. Ascending by GPA\n\n";
+		cout << "\nSORT:\n\t1. Ascending by Username\n\t2. Ascending by GPA";
+		cout << "\nSEARCH: \n\t3. Search by Username:\n\n ";
 
 		for (int i = 0; i < size; i++) {
 			string name = SList[i];
@@ -1144,6 +1147,23 @@ struct Menu {
 			break;
 		case 50:
 			SortStudentScore(SList, size);
+			break;
+		case 51:
+			do {
+				system("cls");
+				cout << "Enter Username to search: ";
+				string userName;
+				cin >> userName;
+
+				// Make sure teacher nhap dung ky tu
+				if (all_of(userName.begin(), userName.end(), ::isalpha)) {
+					SearchStudentByUsername(userName);
+					break;
+				}
+				else {
+					cout << "Invalid input. Username should contain only alphabet characters." << endl;
+				}
+			} while (true);
 			break;
 		case 13:
 			TeacherMenu();
@@ -1156,7 +1176,8 @@ struct Menu {
 		system("cls");
 		cout << "STUDENT'S HIGHSCORE" << endl;
 		cout << "================================\n";
-		cout << "\nSORT:\n\t1. Ascending by Username\n\t2. Ascending by GPA\n\n";
+		cout << "\nSORT:\n\t1. Ascending by Username\n\t2. Ascending by GPA";
+		cout << "\nSEARCH: \n\t3. Search by Username:\n\n ";
 
 		for (int i = 0; i < size; i++) {
 			string name = SList[i];
@@ -1171,6 +1192,23 @@ struct Menu {
 			break;
 		case 50:
 			SortStudentScore(SList, size);
+			break;
+		case 51:
+			do {
+				system("cls");
+				cout << "Enter Username to search: ";
+				string userName;
+				cin >> userName;
+
+				// Make sure teacher nhap dung ky tu
+				if (all_of(userName.begin(), userName.end(), ::isalpha)) {
+					SearchStudentByUsername(userName);
+					break;
+				}
+				else {
+					cout << "Invalid input. Username should contain only alphabet characters." << endl;
+				}
+			} while (true);
 			break;
 		case 13:
 			PrintStudentsScore();
@@ -1202,7 +1240,9 @@ struct Menu {
 		system("cls");
 		cout << "STUDENT'S HIGHSCORE" << endl;
 		cout << "================================\n";
-		cout << "\nSORT:\n\t1. Ascending by Username\n\t2. Ascending by GPA\n\n";
+		cout << "\nSORT:\n\t1. Ascending by Username\n\t2. Ascending by GPA";
+		cout << "\nSEARCH: \n\t3. Search by Username:\n\n ";
+
 
 		for (int i = 0; i < StudentCount; i++) {
 			PrintHighestScores(Student_GPA[i][0], true);
@@ -1218,12 +1258,76 @@ struct Menu {
 		case 50:
 			SortStudentScore(SList, size);
 			break;
+		case 51:
+			do {
+				system("cls");
+				cout << "Enter Username to search: ";
+				string userName;
+				cin >> userName;
+
+				// Make sure teacher nhap dung ky tu
+				if (all_of(userName.begin(), userName.end(), ::isalpha)) {
+					SearchStudentByUsername(userName);
+					break;
+				}
+				else {
+					cout << "Invalid input. Username should contain only alphabet characters." << endl;
+				}
+			} while (true);
+			break;
 		case 13:
 			PrintStudentsScore();
 		default:
 			break;
 		}
-	};
+	}
+	//Hàm tìm kiếm học sinh theo username
+	void SearchStudentByUsername(string searchUsername) {
+		bool continueSearching = true;
+
+		do {
+			ifstream list(FILE_PATH + "User/Teacher/StudentList.txt", ios::app);
+
+			string uName;
+			bool found = false;
+			while (list >> uName) {
+				if (uName == searchUsername) {
+					PrintHighestScores(uName, true);
+					found = true;
+					break;
+				}
+			}
+
+			list.close();
+
+			if (!found) {
+				cout << "Student with username '" << searchUsername << "' not found." << endl;
+			}
+
+			cout << "Do you want to continue searching? (Y/N): ";
+			char response;
+			cin >> response;
+
+			if (tolower(response) != 'y') {
+				continueSearching = false;
+			}
+			else {
+				cout << "Enter another student username to search: ";
+				cin >> searchUsername;
+			}
+
+		} while (continueSearching);
+
+		cout << "Press Esc to go back to the previous menu...";
+		while (true) {
+			if (_kbhit()) {
+				int key = _getch();
+				if (key == KEY_ESC) {
+					return;
+				}
+			}
+		}
+	}
 
 	string CalculateGPA(string uName) {
 		string filePath = FILE_PATH + "User/Student/" + uName + ".txt";
@@ -1473,7 +1577,7 @@ struct Menu {
 		5. Thêm những câu hỏi trong mảng (1) vào file target
 	 */
 	 // Hàm trả về một mảng các câu hỏi unique
-	CauHoi* uniqueQuestions(string targetFilePath, string sourceFilePath, int &size) {
+	CauHoi* uniqueQuestions(string targetFilePath, string sourceFilePath, int& size) {
 		// Số phần tử trong target và source
 		int n1;
 		int n2;
