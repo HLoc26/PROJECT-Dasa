@@ -33,29 +33,6 @@ struct StudentScore {
 	}
 };
 
-/*
-				- Cac ham Print... la de in cac options
-				- Cac ham Menu la de chay logic chon option
- */
-
- /*
-				 StartMenu
-				 StudentMenu
-				 TeacherMenu
-				 SelectSubject
-				 PrintMenu
-				 SelectChapter
-				 PrintMenu (Chapter)
-
-				 StartTest
-				 Test
-
-				 Login
-				 LogInAnimate
-				 CheckValidLogin
-
-				 Register
-  */
 
 struct Menu {
 
@@ -461,13 +438,6 @@ struct Menu {
 				_getch();
 				system("cls");
 
-				// In ra để test, sau này thêm menu teacher rồi đổi
-				// ==============================================//
-				// cout << username << endl
-				//      << password;
-				// _getch();
-				// exit(0);
-				// ==============================================//
 				if (role == ERole::Teacher) {
 					TeacherMenu();
 				}
