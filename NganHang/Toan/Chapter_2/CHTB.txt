@@ -1,0 +1,90 @@
+The area of a trapezoid is given by the formula:
+1/2(a+b).h
+​1/2(a+b)
+1/2a.b
+(a+b).h
+A
+If the radius of a circle is doubled, how does the area change?
+It doubles
+It quadruples
+It halves
+It remains the same
+B
+A right circular cone has a slant height of 10 units and a radius of 6 units. What is the height of the cone?
+8 units
+9 units
+10 units
+12 units
+A
+In a parallelogram, opposite angles are:
+Complementary
+Supplementary
+Equal
+Congruent
+C
+The sum of the interior angles in a hexagon is:
+360 degrees
+540 degrees
+720 degrees
+900 degrees
+A
+If the circumference of a circle is 20π units, what is the radius?
+5 units
+7 units
+10 units
+14 units
+A
+What is the Pythagorean Theorem used for?
+Finding the area of a triangle
+Finding the volume of a cube
+Relating the sides of a right-angled triangle
+Calculating the circumference of a circle
+C
+If two angles in a triangle are 40 degrees and 75 degrees, what is the measure of the third angle?
+35 degrees
+45 degrees
+65 degrees
+90 degrees
+A
+The ratio of the circumference to the diameter of a circle is represented by:
+π
+2π
+π/2
+1/π
+B
+If a square has an area of 64 square units, what is the length of one side?
+4 units
+6 units
+8 units
+10 units
+C
+In a right-angled triangle, if one acute angle is 30 degrees, what is the measure of the other acute angle?
+45 degrees
+60 degrees
+75 degrees
+90 degrees
+B
+The sum of the angles in a quadrilateral is:
+180 degrees
+360 degrees
+240 degrees
+720 degrees
+B
+If the base of a rectangle is doubled while the height remains the same, how does the area change?
+It doubles
+It triples
+It quadruples
+It remains the same
+A
+The volume of a cube is 125 cubic units. What is the length of one side?
+3 units
+4 units
+5 units
+6 units
+C
+If the angles of a triangle are in the ratio 2:3:4, what is the measure of the smallest angle?
+20 degrees
+30 degrees
+40 degrees
+50 degrees
+B
