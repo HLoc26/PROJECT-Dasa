@@ -119,6 +119,7 @@ class Algorithm {
             // Check if the target is present at the middle
             if (arr[mid].noidung.length() == target.noidung.length()) {
                 if (arr[mid] == target) {
+                    cout << arr[mid].noidung << endl << target.noidung << endl;
                     return true;
                 }
             }
@@ -132,8 +133,6 @@ class Algorithm {
                 high = mid - 1;
             }
         }
-
-        // If the target is not present in the array
         return false;
     }
 };
