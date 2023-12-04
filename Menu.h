@@ -34,27 +34,27 @@ struct StudentScore {
 };
 
 /*
-	- Cac ham Print... la de in cac options
-	- Cac ham Menu la de chay logic chon option
+				- Cac ham Print... la de in cac options
+				- Cac ham Menu la de chay logic chon option
  */
 
  /*
-	 StartMenu
-	 StudentMenu
-	 TeacherMenu
-	 SelectSubject
-	 PrintMenu
-	 SelectChapter
-	 PrintMenu (Chapter)
+				 StartMenu
+				 StudentMenu
+				 TeacherMenu
+				 SelectSubject
+				 PrintMenu
+				 SelectChapter
+				 PrintMenu (Chapter)
 
-	 StartTest
-	 Test
+				 StartTest
+				 Test
 
-	 Login
-	 LogInAnimate
-	 CheckValidLogin
+				 Login
+				 LogInAnimate
+				 CheckValidLogin
 
-	 Register
+				 Register
   */
 
 struct Menu {
@@ -323,8 +323,6 @@ struct Menu {
 
 		int count = ReadSubDir(chapList, BANK_PATH + "/" + monhoc);
 
-		cout << "Chap1: " << chapList[0] << endl;
-
 		int option = count * 1000;
 		while (true) {
 			system("cls");
@@ -351,9 +349,7 @@ struct Menu {
 		}
 	}
 	void PrintMenu(string monhoc, string chapList[], int listSize, int option) {
-
 		cout << endl << monhoc << endl;
-
 		for (int i = 0; i < listSize; i++) {
 			if (i == option % listSize) {
 				cout << COLOR_BLUE << "\t> " << chapList[i] << " <" << COLOR_END
@@ -662,8 +658,7 @@ struct Menu {
 			cout << "==============================\n";
 			int ch;
 			if (!isValidUser) {
-				cout << COLOR_RED
-					<< "Username is used!" << COLOR_END << "\n";
+				cout << COLOR_RED << "Username is used!" << COLOR_END << "\n";
 			}
 			cout << "Username: ";
 			while ((ch = _getch()) != KEY_ENTER) {
@@ -805,7 +800,7 @@ struct Menu {
 
 		/*
 		cout << userInp << endl
-			 << passInp << endl;
+						 << passInp << endl;
 		_getch();
 		*/
 		// Create the folder
@@ -1095,10 +1090,10 @@ struct Menu {
 
 				for (int i = 0; i < HIndex; i++) {
 					cout << setw(12) << left << highScoreSubj[i] << setw(10) << left
-						<< highScoreChap[i] << setw(10) << left << highScore[i] << endl;
+						<< highScoreChap[i] + 1 << setw(10) << left << highScore[i] << endl;
 				}
 
-				cout << CalculateGPA(uName) << endl;
+				cout << "GPA: " << CalculateGPA(uName) << endl;
 				cout << "================================\n\n";
 			}
 			inFile.close();
@@ -1112,7 +1107,7 @@ struct Menu {
 		}
 	}
 
-	//Thêm case 51 vào 3 hàm này
+	// Thêm case 51 vào 3 hàm này
 
 	void PrintStudentsScore() {
 		system("cls");
@@ -1161,7 +1156,9 @@ struct Menu {
 					break;
 				}
 				else {
-					cout << "Invalid input. Username should contain only alphabet characters." << endl;
+					cout << "Invalid input. Username should contain only alphabet "
+						"characters."
+						<< endl;
 				}
 			} while (true);
 			break;
@@ -1190,6 +1187,7 @@ struct Menu {
 			Algorithm.QuickSortName(SList, 0, size - 1);
 			PrintSortedScore(SList, size);
 			break;
+			break;
 		case 50:
 			SortStudentScore(SList, size);
 			break;
@@ -1206,7 +1204,9 @@ struct Menu {
 					break;
 				}
 				else {
-					cout << "Invalid input. Username should contain only alphabet characters." << endl;
+					cout << "Invalid input. Username should contain only alphabet "
+						"characters."
+						<< endl;
 				}
 			} while (true);
 			break;
@@ -1222,9 +1222,9 @@ struct Menu {
 		int StudentCount = size;
 		// Tạo một ma trận có cấu trúc:
 		/* {[TenHS1, Diem],
-			[TenHS2, Diem],
-			...
-			}*/
+						[TenHS2, Diem],
+						...
+						}*/
 		string** Student_GPA = new string * [StudentCount];
 
 		for (int i = 0; i < StudentCount; i++) {
@@ -1242,7 +1242,6 @@ struct Menu {
 		cout << "================================\n";
 		cout << "\nSORT:\n\t1. Ascending by Username\n\t2. Ascending by GPA";
 		cout << "\nSEARCH: \n\t3. Search by Username:\n\n ";
-
 
 		for (int i = 0; i < StudentCount; i++) {
 			PrintHighestScores(Student_GPA[i][0], true);
@@ -1271,7 +1270,9 @@ struct Menu {
 					break;
 				}
 				else {
-					cout << "Invalid input. Username should contain only alphabet characters." << endl;
+					cout << "Invalid input. Username should contain only alphabet "
+						"characters."
+						<< endl;
 				}
 			} while (true);
 			break;
@@ -1281,7 +1282,7 @@ struct Menu {
 			break;
 		}
 	}
-	//Hàm tìm kiếm học sinh theo username
+	// Hàm tìm kiếm học sinh theo username
 	void SearchStudentByUsername(string searchUsername) {
 		bool continueSearching = true;
 
@@ -1301,7 +1302,8 @@ struct Menu {
 			list.close();
 
 			if (!found) {
-				cout << "Student with username '" << searchUsername << "' not found." << endl;
+				cout << "Student with username '" << searchUsername << "' not found."
+					<< endl;
 			}
 
 			cout << "Do you want to continue searching? (Y/N): ";
@@ -1428,9 +1430,12 @@ struct Menu {
 
 				DanhSach DSXemTruoc;
 				subject = Capitalize(subject);
-				ifstream check(BANK_PATH + subject + "/Chapter_" + to_string(chapter) + "/" + difficulty + ".txt");
+				ifstream check(BANK_PATH + subject + "/Chapter_" + to_string(chapter) +
+					"/" + difficulty + ".txt");
 				if (!check.fail()) {
-					cout << BANK_PATH + subject + "/Chapter_" + to_string(chapter) + "/" + difficulty + ".txt" << endl;
+					cout << BANK_PATH + subject + "/Chapter_" + to_string(chapter) + "/" +
+						difficulty + ".txt"
+						<< endl;
 					DSXemTruoc.DocFile(subject, chapter - 1);
 					if (difficulty == "CHDe")
 						DSXemTruoc.InDSCauHoi(1);
@@ -1441,8 +1446,11 @@ struct Menu {
 					_getch();
 				}
 				else {
-					cout << BANK_PATH + subject + "/Chapter_" + to_string(chapter) + "/" + difficulty + ".txt" << endl;
-					cout << "Currently there are no question in " << subject << " chapter " << chapter << "!\n";
+					cout << BANK_PATH + subject + "/Chapter_" + to_string(chapter) + "/" +
+						difficulty + ".txt"
+						<< endl;
+					cout << "Currently there are no question in " << subject
+						<< " chapter " << chapter << "!\n";
 					_getch();
 				}
 				cout << "Enter file path of the question: ";
@@ -1492,7 +1500,8 @@ struct Menu {
 		}
 	}
 
-	bool AddQuestionToBank(string subject, int chapter, string difficulty, string filePath) {
+	bool AddQuestionToBank(string subject, int chapter, string difficulty,
+		string filePath) {
 		cout << Capitalize(subject) << endl;
 		// Đường dẫn tới thư mục của môn học
 		string subjectPath = BANK_PATH + Capitalize(subject) + "/";
@@ -1505,7 +1514,8 @@ struct Menu {
 		// Đường dẫn tới file mới
 		string newFilePath = chapterPath + difficulty + ".txt";
 
-		// Kiểm tra file mới có trống không, trống thì mới tăng CHAP_COUNT lên 1 đơn vị
+		// Kiểm tra file mới có trống không, trống thì mới tăng CHAP_COUNT lên 1 đơn
+		// vị
 		ifstream targetFileIn(newFilePath);
 		targetFileIn.seekg(0, std::ios::end);
 		size_t size = targetFileIn.tellg();
@@ -1566,18 +1576,19 @@ struct Menu {
 	}
 
 	/*
-		Check các câu trùng lặp:
-		__ Tạo một mảng những câu hỏi sẽ thêm vào target (1)
-		__ Tạo một mảng những câu hỏi không thêm vào target (2)
-		1. Đọc file target, cho vào mảng mới, sau đó sắp xếp lại theo thứ tự tăng
-	   dần dùng merge sort
-		2. Sau đó dùng binary search tìm trên mảng
-		3. Nếu tìm thấy thì add vào mảng (2)
-		4. Những câu hỏi ko tìm thấy thì add vào mảng (1)
-		5. Thêm những câu hỏi trong mảng (1) vào file target
+					Check các câu trùng lặp:
+					__ Tạo một mảng những câu hỏi sẽ thêm vào target (1)
+					__ Tạo một mảng những câu hỏi không thêm vào target (2)
+					1. Đọc file target, cho vào mảng mới, sau đó sắp xếp lại theo
+	   thứ tự tăng dần dùng merge sort
+					2. Sau đó dùng binary search tìm trên mảng
+					3. Nếu tìm thấy thì add vào mảng (2)
+					4. Những câu hỏi ko tìm thấy thì add vào mảng (1)
+					5. Thêm những câu hỏi trong mảng (1) vào file target
 	 */
 	 // Hàm trả về một mảng các câu hỏi unique
-	CauHoi* uniqueQuestions(string targetFilePath, string sourceFilePath, int& size) {
+	CauHoi* uniqueQuestions(string targetFilePath, string sourceFilePath,
+		int& size) {
 		// Số phần tử trong target và source
 		int n1;
 		int n2;

@@ -7,6 +7,6 @@
 using namespace std;
 
 int main() {
-  Menu menu = Menu();
-  menu.StartMenu();
+	Menu menu = Menu();
+	menu.StartMenu();
 }
