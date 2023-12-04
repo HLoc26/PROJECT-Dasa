@@ -39,7 +39,7 @@ What is the product of 0.75 x 8?
 6.5
 6.3
 6.8
-B
+A
 Divide 11.2 / 2.8
 4.0
 4.2

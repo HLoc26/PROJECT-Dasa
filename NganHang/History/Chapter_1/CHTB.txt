@@ -1,0 +1,60 @@
+What is the result of 5 + 7?
+10
+11
+12
+13
+C
+What is the sum of the first 20 positive integers?
+190
+200
+210
+220
+B
+What is the product of 6 multiplied by 9?
+45
+54
+60
+75
+B
+What is the square root of 144?
+10
+12
+14
+16
+B
+What is the value of  (2 raised to the power of 3)?
+4
+6
+8
+16
+C
+If x = 4 and y = 7, what is the value of x+y?
+9
+11
+12
+14
+B
+What is the sum of the first five prime numbers?
+15
+20
+18
+28
+C
+If a car travels at a speed of 60 miles per hour, how far will it travel in 3 hours?
+120 miles
+150 miles
+180 miles
+210 miles
+C
+What is the result of 15 divided by 3?
+3
+5
+10
+15
+A
+What is the product of −4 and 9?
+A) -36
+B) -27
+C) 36
+D) 27
+A
