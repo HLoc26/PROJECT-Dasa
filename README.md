@@ -25,9 +25,9 @@ Construct the program to create multiple choices tests for students
         . Nút 2 là bắt đầu tìm kiếm
     + Nhớ thêm nút esc là quay lại, không phải thoát hẳn chương trình.
 ### Sáng
-- [ ] Hoàn thiện file DOCX và PPT, HẠN CHẾ dùng AI
-- [ ] Chỉ chụp những hàm logic đưa lên word, những hàm Print thì mention một phần nhỏ thôi, không cần chụp code
-- [ ] Phần demo bắt đầu test đã xong, hoàn thiện phần demo trong file WORD
+- [x] Hoàn thiện file DOCX và PPT, HẠN CHẾ dùng AI (ppt k nộp đâu, juan)
+- [x] Chỉ chụp những hàm logic đưa lên word, những hàm Print thì mention một phần nhỏ thôi, không cần chụp code
+- [x] Phần demo bắt đầu test đã xong, hoàn thiện phần demo trong file WORD
 
 ### Lộc
 - [ ] Thêm show câu hỏi hiện tại có trong bank cho GV khi chọn chapter đã có câu hỏi
